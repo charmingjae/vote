@@ -1,44 +1,37 @@
-from flask import Flask, request, render_template, jsonify
 import hashlib
 import json
 from time import time
 from urllib.parse import urlparse
 from uuid import uuid4
+
 import requests
+from flask import Flask, jsonify, request
 
 
-# Block chain
 class Blockchain:
     def __init__(self):
+        # 블록에 들어갈 트랜잭션
         self.current_transactions = []
+        # 체인
         self.chain = []
+        # 연결 된 노드들
         self.nodes = set()
 
-        # Create the genesis block
+        # 제네시스 블록 생성
         self.new_block(previous_hash='1', proof=100)
 
+    # 노드 생성
     def register_node(self, address):
-        """
-        Add a new node to the list of nodes
-        :param address: Address of node. Eg. 'http://192.168.0.5:5000'
-        """
-
         parsed_url = urlparse(address)
         if parsed_url.netloc:
             self.nodes.add(parsed_url.netloc)
         elif parsed_url.path:
-            # Accepts an URL without scheme like '192.168.0.5:5000'.
             self.nodes.add(parsed_url.path)
         else:
-            raise ValueError('Invalid URL')
+            raise ValueError('유효하지 않은 주소입니다.')
 
+    # 체인 검증
     def valid_chain(self, chain):
-        """
-        Determine if a given blockchain is valid
-        :param chain: A blockchain
-        :return: True if valid, False if not
-        """
-
         last_block = chain[0]
         current_index = 1
 
@@ -62,19 +55,11 @@ class Blockchain:
         return True
 
     def resolve_conflicts(self):
-        """
-        This is our consensus algorithm, it resolves conflicts
-        by replacing our chain with the longest one in the network.
-        :return: True if our chain was replaced, False if not
-        """
-
         neighbours = self.nodes
         new_chain = None
 
-        # We're only looking for chains longer than ours
         max_length = len(self.chain)
 
-        # Grab and verify the chains from all the nodes in our network
         for node in neighbours:
             response = requests.get(f'http://{node}/chain')
 
@@ -116,7 +101,7 @@ class Blockchain:
         self.chain.append(block)
         return block
 
-    def new_transaction(self, candidate):
+    def new_transaction(self, location, name, phone):
         """
         Creates a new transaction to go into the next mined Block
         :param sender: Address of the Sender
@@ -125,7 +110,9 @@ class Blockchain:
         :return: The index of the Block that will hold this transaction
         """
         self.current_transactions.append({
-            'candidate': candidate,
+            'location': location,
+            'name': name,
+            'phone': phone,
         })
 
         return self.last_block['index'] + 1
@@ -178,127 +165,3 @@ class Blockchain:
         guess = f'{last_proof}{proof}{last_hash}'.encode()
         guess_hash = hashlib.sha256(guess).hexdigest()
         return guess_hash[:4] == "0000"
-
-
-app = Flask(__name__)
-
-
-@app.route('/')
-def helloIndex():
-    return render_template('index.html')
-
-
-@app.route('/vote')
-def hellohtml():
-    return render_template('vote.html', response=None)
-
-
-# 투표 마지막 페이지로 이동
-@app.route('/vote/finish', methods=['POST'])
-def finish_vote():
-    candidate = request.form['candidate']
-
-    response = '선정 된 후보자 : ' + candidate
-    return render_template('fin.html', response=response)
-
-
-# Generate a globally unique address for this node
-node_identifier = str(uuid4()).replace('-', '')
-
-# Instantiate the Blockchain
-blockchain = Blockchain()
-
-# add Transaction
-
-
-@ app.route('/tran/new', methods=['POST'])
-def new_tran():
-    candidate = request.form['candidate']
-    # jsonObj = json.dumps({'location': loc, 'name': name,
-    #                       'phone': phone}, ensure_ascii=False)
-    jsonObj = json.dumps({'candidate': candidate}, ensure_ascii=False)
-    jsonObj = json.loads(jsonObj)
-    # required = ['location', 'name', 'phone']
-    required = ['candidate']
-    if not all(k in jsonObj for k in required):
-        return 'Missing values', 400
-
-    # Create a new Transaction
-    # index = blockchain.new_transaction(
-    #     jsonObj['location'], jsonObj['name'], jsonObj['phone'])
-    index = blockchain.new_transaction(
-        jsonObj['candidate'])
-
-    # response = {'message': f'Transaction will be added to Block {index}'}
-    response = '트랜잭션이 추가 되었습니다.'
-    # return jsonify(response), 201
-    return render_template('index.html', response=response)
-
-
-# mine new block
-@ app.route('/mine/new', methods=['GET'])
-def new_mine():
-    last_block = blockchain.last_block
-    proof = blockchain.proof_of_work(last_block)
-
-    previous_hash = blockchain.hash(last_block)
-    block = blockchain.new_block(proof, previous_hash)
-
-    # response = {
-    #     'message': "New Block Forged",
-    #     'index': block['index'],
-    #     'transactions': block['transactions'],
-    #     'proof': block['proof'],
-    #     'previous_hash': block['previous_hash'],
-    # }
-
-    response = '{0}번째 블록이 생성되었습니다. proof={1}'.format(
-        block['index'], block['proof'])
-    return render_template('index.html', response=response)
-
-
-@ app.route('/chain', methods=['GET'])
-def full_chain():
-    response = {
-        'chain': blockchain.chain,
-        'length': len(blockchain.chain),
-    }
-    return jsonify(response), 200
-
-
-@ app.route('/nodes/register', methods=['POST'])
-def register_nodes():
-    values = request.get_json()
-
-    nodes = values.get('nodes')
-    if nodes is None:
-        return "Error: Please supply a valid list of nodes", 400
-
-    for node in nodes:
-        blockchain.register_node(node)
-
-    response = {
-        'message': 'New nodes have been added',
-        'total_nodes': list(blockchain.nodes),
-    }
-    return jsonify(response), 201
-
-
-@ app.route('/nodes/resolve', methods=['GET'])
-def consensus():
-    replaced = blockchain.resolve_conflicts()
-
-    if replaced:
-        response = ':: Our chain was replaced ::'
-        # 'new_chain': blockchain.chain
-
-    else:
-        response = ':: Our chain is representative ::'
-        # 'chain': blockchain.chain
-
-    # return jsonify(response), 200
-    return render_template('index.html', response=response)
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
