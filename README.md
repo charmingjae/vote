@@ -2,11 +2,11 @@
 
 # __Vote system via blockchain__
 
-<br/><br/><br/>
+<br/>
 
 ---
 
-## __Tech__
+## *__Tech__*
 __Frontend__ | [BULMA](bulma.io)
 
 __Backend__  | Python
