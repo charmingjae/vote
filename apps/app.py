@@ -8,9 +8,17 @@ def hello():
     return render_template('index.html')
 
 
-@app.route('/hello')
+@app.route('/vote')
 def hellohtml():
-    return render_template('hello.html')
+    return render_template('vote.html')
+
+
+@app.route('/vote/finish', methods=['POST'])
+def finish_vote():
+    candidate = request.form['candidate']
+
+    response = '선정 된 후보자 : ' + candidate
+    return render_template('fin.html', response=response)
 
 
 if __name__ == '__main__':
