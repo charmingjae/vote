@@ -230,9 +230,9 @@ def new_tran():
         jsonObj['candidate'])
 
     # response = {'message': f'Transaction will be added to Block {index}'}
-    response = '트랜잭션이 추가 되었습니다.'
+    response = '🥳 투표해주셔서 감사합니다. 🥳'
     # return jsonify(response), 201
-    return render_template('index.html', response=response)
+    return render_template('fin.html', response=response)
 
 
 # mine new block
@@ -298,6 +298,31 @@ def consensus():
 
     # return jsonify(response), 200
     return render_template('index.html', response=response)
+
+
+@app.route('/total')
+def getTotal():
+    chainLength = len(blockchain.chain)
+    # test = blockchain.chain[2]['transactions']
+
+    candidate_1 = 0
+    candidate_2 = 0
+    total_len = 0
+
+    for blockLength in range(chainLength):
+        total_len = total_len + \
+            len(blockchain.chain[blockLength]['transactions'])
+        for tranLength in range(len(blockchain.chain[blockLength]['transactions'])):
+            if blockchain.chain[blockLength]['transactions'][tranLength]['candidate'] == '1':
+                candidate_1 = candidate_1 + 1
+            else:
+                candidate_2 = candidate_2 + 1
+
+    print('candidate 1 : ', candidate_1)
+    print('candidate_2 : ', candidate_2)
+    print('총 투표자 수 : ', total_len)
+
+    return render_template('total.html', chainLength=chainLength, candidate_1=candidate_1, candidate_2=candidate_2, total_len=total_len)
 
 
 if __name__ == '__main__':
