@@ -10,7 +10,7 @@ def hello():
 
 @app.route('/vote')
 def hellohtml():
-    return render_template('vote.html')
+    return render_template('vote.html', response=None)
 
 
 @app.route('/vote/finish', methods=['POST'])
