@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, jsonify, redirect
+from flask import Flask, request, render_template, jsonify, redirect, session, escape
 import hashlib
 import json
 from time import time
@@ -186,12 +186,18 @@ app = Flask(__name__)
 
 @app.route('/')
 def helloIndex():
-    return render_template('index.html')
+    if "username" in session:
+        return render_template('index.html', userSession=session["username"])
+    else:
+        return render_template('index.html')
 
 
 @app.route('/vote')
 def hellohtml():
-    return render_template('vote.html', response=None)
+    if "username" in session:
+        return render_template('vote.html', response=None, userSession=session["username"])
+    else:
+        return render_template('vote.html', response=None)
 
 
 # 투표 마지막 페이지로 이동
@@ -200,7 +206,10 @@ def finish_vote():
     candidate = request.form['candidate']
 
     response = '선정 된 후보자 : ' + candidate
-    return render_template('fin.html', response=response)
+    if "username" in session:
+        return render_template('fin.html', response=response, userSession=session["username"])
+    else:
+        return render_template('fin.html', response=response)
 
 
 # Generate a globally unique address for this node
@@ -233,7 +242,10 @@ def new_tran():
     # response = {'message': f'Transaction will be added to Block {index}'}
     response = '🥳 투표해주셔서 감사합니다. 🥳'
     # return jsonify(response), 201
-    return render_template('fin.html', response=response)
+    if "username" in session:
+        return render_template('fin.html', response=response, userSession=session["username"])
+    else:
+        return render_template('fin.html', response=response)
 
 
 # mine new block
@@ -255,7 +267,10 @@ def new_mine():
 
     response = '{0}번째 블록이 생성되었습니다. proof={1}'.format(
         block['index'], block['proof'])
-    return render_template('index.html', response=response)
+    if "username" in session:
+        return render_template('index.html', response=response, userSession=session["username"])
+    else:
+        return render_template('index.html', response=response)
 
 
 @ app.route('/chain', methods=['GET'])
@@ -298,7 +313,10 @@ def consensus():
         # 'chain': blockchain.chain
 
     # return jsonify(response), 200
-    return render_template('index.html', response=response)
+    if "username" in session:
+        return render_template('index.html', response=response, userSession=session["username"])
+    else:
+        return render_template('index.html', response=response)
 
 
 @app.route('/total')
@@ -323,7 +341,10 @@ def getTotal():
     print('candidate_2 : ', candidate_2)
     print('총 투표자 수 : ', total_len)
 
-    return render_template('total.html', chainLength=chainLength, candidate_1=candidate_1, candidate_2=candidate_2, total_len=total_len)
+    if "username" in session:
+        return render_template('total.html', chainLength=chainLength, candidate_1=candidate_1, candidate_2=candidate_2, total_len=total_len, userSession=session["username"])
+    else:
+        return render_template('total.html', chainLength=chainLength, candidate_1=candidate_1, candidate_2=candidate_2, total_len=total_len)
 
 
 @app.route('/signup')
@@ -333,21 +354,62 @@ def goSignup():
 
 @app.route('/signup/progress', methods=['POST'])
 def signupProg():
+    # 폼 데이터 가져오기
+    userid = request.form['userid']
+    userpw = request.form['userpw']
+
+    # 데이터베이스 생성자
+    db_class = db.Database()
+
+    # 1. 테이블에 데이터가 이미 있는지 확인하기
+    sql = "SELECT COUNT(*) FROM user WHERE userid = '%s'" % userid
+    row = db_class.executeAll(sql)
+    if row[0]['COUNT(*)'] == 1:
+        response = '''alert('이미 존재하는 아이디입니다.');'''
+    else:
+        # 2. 없으면 테이블에 인서트 하기
+        sql = "INSERT INTO user(userid, userpw) VALUES('%s','%s');" % (
+            userid, userpw)
+
+        db_class.execute(sql)
+        db_class.commit()
+        response = '''alert('회원가입 완료!');'''
+
+    return render_template('index.html', response=response)
+
+
+@app.route('/login')
+def goLogin():
+    return render_template('login.html')
+
+
+app.secret_key = "ABCDEFG"
+
+
+@app.route('/login/progress', methods=['POST'])
+def loginProg():
+    # 폼 데이터 가져오기
     userid = request.form['userid']
     userpw = request.form['userpw']
 
     db_class = db.Database()
 
-    sql = "INSERT INTO user(userid, userpw) VALUES('%s','%s');" % (
-        userid, userpw)
-    print(sql)
+    sql = "SELECT COUNT(*) FROM user WHERE userid = '%s' and userpw = '%s'" % (userid, userpw)
+    row = db_class.executeAll(sql)
+    if row[0]['COUNT(*)'] == 1:
+        session["username"] = userid
+        response = '''alert('로그인 성공! %s');''' % session["username"]
+        userSession = session["username"]
+        return render_template('index.html', response=response, userSession=session["username"])
+    else:
+        response = '''alert('입력 정보를 확인하세요.');'''
+        return render_template('login.html', response=response)
 
-    db_class.execute(sql)
-    db_class.commit()
 
-    response = '''alert('회원가입 완료!');'''
-
-    return render_template('index.html', response=response)
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect("/", code=302)
 
 
 if __name__ == '__main__':

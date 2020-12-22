@@ -56,19 +56,31 @@
                   </div>
                 </div>
               </div>
-          
+              {% if userSession %}
+              <div class="navbar-end">
+                <div class="navbar-item">
+                  <div class="buttons">
+                    <p>{{userSession}}</p> &nbsp;
+                    <a class="button is-light" href="http://localhost:5000/logout">
+                      로그아웃
+                    </a>
+                  </div>
+                </div>
+              </div>
+              {% else %}
               <div class="navbar-end">
                 <div class="navbar-item">
                   <div class="buttons">
                     <a class="button is-primary" href="http://localhost:5000/signup">
                       <strong>Sign up</strong>
                     </a>
-                    <a class="button is-light">
+                    <a class="button is-light" href="http://localhost:5000/login">
                       Log in
                     </a>
                   </div>
                 </div>
               </div>
+              {% endif %}
             </div>
           </nav>
     </body>
