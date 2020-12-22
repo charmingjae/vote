@@ -1,10 +1,11 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, request, render_template, jsonify, redirect
 import hashlib
 import json
 from time import time
 from urllib.parse import urlparse
 from uuid import uuid4
 import requests
+from modules import db
 
 
 # Block chain
@@ -323,6 +324,30 @@ def getTotal():
     print('총 투표자 수 : ', total_len)
 
     return render_template('total.html', chainLength=chainLength, candidate_1=candidate_1, candidate_2=candidate_2, total_len=total_len)
+
+
+@app.route('/signup')
+def goSignup():
+    return render_template('signup.html')
+
+
+@app.route('/signup/progress', methods=['POST'])
+def signupProg():
+    userid = request.form['userid']
+    userpw = request.form['userpw']
+
+    db_class = db.Database()
+
+    sql = "INSERT INTO user(userid, userpw) VALUES('%s','%s');" % (
+        userid, userpw)
+    print(sql)
+
+    db_class.execute(sql)
+    db_class.commit()
+
+    response = '''alert('회원가입 완료!');'''
+
+    return render_template('index.html', response=response)
 
 
 if __name__ == '__main__':

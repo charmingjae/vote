@@ -16,6 +16,13 @@
             </div>
         </div>
 
-        {{response}}
+        {% if response == None %}
+        {% else %}
+            {% autoescape off %}
+                <script>
+                    {{response}}
+                </script>
+            {% endautoescape %}
+        {% endif %}
     </body>
 </html>
