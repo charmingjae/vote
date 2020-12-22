@@ -184,6 +184,16 @@ class Blockchain:
 app = Flask(__name__)
 
 
+def getUserVote(username):
+    db_class = db.Database()
+    sql = "SELECT voteWT FROM user WHERE userid = '%s'" % username
+    row = db_class.executeAll(sql)
+    if row[0]['voteWT'] == 'NO':
+        return 0
+    else:
+        return 1
+
+
 @app.route('/')
 def helloIndex():
     if "username" in session:
@@ -195,13 +205,20 @@ def helloIndex():
 @app.route('/vote')
 def hellohtml():
     if "username" in session:
-        return render_template('vote.html', response=None, userSession=session["username"])
+        # 1. 투표 여부 가져오기
+        res = getUserVote(session["username"])
+        # 2. 투표 한 사람이면 '이미 투표를 완료했습니다.' alert 띄우기
+        if res:
+            response = '''alert(' %s님은 이미 투표를 완료했습니다.');''' % session["username"]
+            return render_template('index.html', response=response, userSession=session["username"])
+        else:
+            return render_template('vote.html', response=None, userSession=session["username"])
     else:
-        return render_template('vote.html', response=None)
+        return render_template('login.html', response=None)
 
 
 # 투표 마지막 페이지로 이동
-@app.route('/vote/finish', methods=['POST'])
+@ app.route('/vote/finish', methods=['POST'])
 def finish_vote():
     candidate = request.form['candidate']
 
@@ -223,6 +240,7 @@ blockchain = Blockchain()
 
 @ app.route('/tran/new', methods=['POST'])
 def new_tran():
+    print("session : ", session["username"])
     candidate = request.form['candidate']
     # jsonObj = json.dumps({'location': loc, 'name': name,
     #                       'phone': phone}, ensure_ascii=False)
@@ -239,6 +257,13 @@ def new_tran():
     index = blockchain.new_transaction(
         jsonObj['candidate'])
 
+    db_class = db.Database()
+
+    sql = "UPDATE user SET voteWT = 'YES' WHERE userid = '%s'" % (
+        session["username"])
+    print(sql)
+    db_class.execute(sql)
+    db_class.commit()
     # response = {'message': f'Transaction will be added to Block {index}'}
     response = '🥳 투표해주셔서 감사합니다. 🥳'
     # return jsonify(response), 201
@@ -319,7 +344,7 @@ def consensus():
         return render_template('index.html', response=response)
 
 
-@app.route('/total')
+@ app.route('/total')
 def getTotal():
     chainLength = len(blockchain.chain)
     # test = blockchain.chain[2]['transactions']
@@ -347,12 +372,12 @@ def getTotal():
         return render_template('total.html', chainLength=chainLength, candidate_1=candidate_1, candidate_2=candidate_2, total_len=total_len)
 
 
-@app.route('/signup')
+@ app.route('/signup')
 def goSignup():
     return render_template('signup.html')
 
 
-@app.route('/signup/progress', methods=['POST'])
+@ app.route('/signup/progress', methods=['POST'])
 def signupProg():
     # 폼 데이터 가져오기
     userid = request.form['userid']
@@ -378,7 +403,7 @@ def signupProg():
     return render_template('index.html', response=response)
 
 
-@app.route('/login')
+@ app.route('/login')
 def goLogin():
     return render_template('login.html')
 
@@ -386,7 +411,7 @@ def goLogin():
 app.secret_key = "ABCDEFG"
 
 
-@app.route('/login/progress', methods=['POST'])
+@ app.route('/login/progress', methods=['POST'])
 def loginProg():
     # 폼 데이터 가져오기
     userid = request.form['userid']
@@ -406,7 +431,7 @@ def loginProg():
         return render_template('login.html', response=response)
 
 
-@app.route('/logout')
+@ app.route('/logout')
 def logout():
     session.clear()
     return redirect("/", code=302)

@@ -22,6 +22,11 @@
                 </label>
 
                 <button type="button" class="button is-primary" onclick="chkFormNull()">Vote!</button>
+
+                {% if userSession %}
+                    <p> {{userSession}} 아이디로 투표 중 입니다.</p>
+                {% else %}
+                {% endif %}
             </div>
         </form>
     </body>
