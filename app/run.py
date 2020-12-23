@@ -374,8 +374,15 @@ def getTotal():
     print('candidate_2 : ', candidate_2)
     print('총 투표자 수 : ', total_len)
 
+    if candidate_1 > candidate_2:
+        superiority = '1번 후보자 우세'
+    elif candidate_2 > candidate_1:
+        superiority = '2번 후보자 우세'
+    else:
+        superiority = '박빙!'
+
     if "username" in session:
-        return render_template('total.html', chainLength=chainLength, candidate_1=candidate_1, candidate_2=candidate_2, total_len=total_len, userSession=session["username"])
+        return render_template('total.html', chainLength=chainLength, candidate_1=candidate_1, candidate_2=candidate_2, total_len=total_len, superiority=superiority, userSession=session["username"])
     else:
         return render_template('total.html', chainLength=chainLength, candidate_1=candidate_1, candidate_2=candidate_2, total_len=total_len)
 
