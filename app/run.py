@@ -5,6 +5,7 @@ from time import time
 from urllib.parse import urlparse
 from uuid import uuid4
 import requests
+import threading
 from modules import db
 
 
@@ -281,7 +282,7 @@ def new_tran():
 
 
 # mine new block
-@ app.route('/mine/new', methods=['GET'])
+# @ app.route('/mine/new', methods=['GET'])
 def new_mine():
     last_block = blockchain.last_block
     proof = blockchain.proof_of_work(last_block)
@@ -297,13 +298,18 @@ def new_mine():
     #     'previous_hash': block['previous_hash'],
     # }
 
-    response = '''alert('%s번째 블록이 생성되었습니다. proof=%s');''' % (
+    # response = '''alert('%s번째 블록이 생성되었습니다. proof=%s');''' % (
+    #     block['index'], block['proof'])
+    response = '''[ NOTICE ] %s번째 블록이 생성되었습니다. proof=%s''' % (
         block['index'], block['proof'])
-    if "username" in session:
-        print(response)
-        return render_template('index.html', response=response, userSession=session["username"])
-    else:
-        return render_template('index.html', response=response)
+
+    print(response)
+    threading.Timer(5, new_mine).start()
+    # if "username" in session:
+    #     print(response)
+    #     return render_template('index.html', response=response, userSession=session["username"])
+    # else:
+    #     return render_template('index.html', response=response)
 
 
 @ app.route('/chain', methods=['GET'])
@@ -313,6 +319,7 @@ def full_chain():
         'length': len(blockchain.chain),
     }
     return jsonify(response), 200
+    # return json.dumps(response), 200
 
 
 @ app.route('/nodes/register', methods=['POST'])
@@ -384,7 +391,7 @@ def getTotal():
     if "username" in session:
         return render_template('total.html', chainLength=chainLength, candidate_1=candidate_1, candidate_2=candidate_2, total_len=total_len, superiority=superiority, userSession=session["username"])
     else:
-        return render_template('total.html', chainLength=chainLength, candidate_1=candidate_1, candidate_2=candidate_2, total_len=total_len)
+        return render_template('total.html', chainLength=chainLength, candidate_1=candidate_1, candidate_2=candidate_2, total_len=total_len, superiority=superiority)
 
 
 @ app.route('/signup')
@@ -466,4 +473,5 @@ def fresh():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    new_mine()
+    app.run(debug=True, use_reloader=False)
