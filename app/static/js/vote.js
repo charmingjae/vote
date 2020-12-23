@@ -23,3 +23,17 @@ function chkFormNull() {
     }
   }
 }
+
+function vote1(elem) {
+  var conf = confirm(elem.id + " 번 후보에게 투표하시겠습니까?");
+  if (conf) {
+    document.voteForm1.submit();
+  }
+}
+
+function vote2(elem) {
+  var conf = confirm(elem.id + " 번 후보에게 투표하시겠습니까?");
+  if (conf) {
+    document.voteForm2.submit();
+  }
+}

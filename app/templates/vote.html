@@ -5,12 +5,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>😎 Vote 😎</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+        <link rel="stylesheet" type="text/css" href="../static/css/vote.css">
         <script src="../static/js/vote.js"></script>
     </head>
     <body>
         {% include 'navbar.html' %}
 
-        <form action="/tran/new" method="POST" name="voteForm">
+        <!-- <form action="/tran/new" method="POST" name="voteForm1">
             <div class="control">
                 <label class="radio">
                   <input type="radio" name="candidate" value="1">
@@ -28,6 +29,39 @@
                 {% else %}
                 {% endif %}
             </div>
-        </form>
+        </form> -->
+        <br/>
+        {% if userSession %}
+                    <p> {{userSession}} 아이디로 투표 중 입니다.</p>
+        {% else %}
+        {% endif %}
+        <br/><br/><br/>
+        <section class="content tiles">
+            <div class="container">
+                <div class="columns">
+                    <form action="/tran/new" method="POST" class="column" name="voteForm1">
+                        <input type="hidden" name="candidate" value="1"/>
+                        <div id="1" onclick="vote1(this)">
+                            <a class="box social" target="_blank">
+                                <p class="title is-2">Candidate 1</p>
+                                <p class="subtitle is-4 is-marginless">첫 번째 후보자입니다.</p>
+                            </a>
+                            <!-- <input type="radio" name="candidate" value="1"/> -->
+                        </div>
+                    </form>
+                    <form action="/tran/new" method="POST" class="column" name="voteForm2">
+                        <input type="hidden" name="candidate" value="2"/>
+                        <div id="2" onclick="vote2(this)">
+                            <a class="box social" target="_blank">
+                                <p class="title is-2">Candidate 2</p>
+                                <p class="subtitle is-4 is-marginless">두 번째 후보자입니다.</p>
+                            </a>
+                            <!-- <input type="radio" name="candidate" value="2"/> -->
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+          
     </body>
 </html>

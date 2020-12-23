@@ -10,7 +10,8 @@
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
               <a class="navbar-item" href="http://localhost:5000/">
-                <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
+                <!-- <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28"> -->
+                <img src="https://sports.chosun.com/news/html/2020/11/03/2020110401000235000014922.jpg" width="112" height="28">
               </a>
           
               <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
@@ -36,12 +37,12 @@
           
                 <div class="navbar-item has-dropdown is-hoverable">
                   <a class="navbar-link">
-                    More
+                    실험실
                   </a>
           
                   <div class="navbar-dropdown">
-                    <a class="navbar-item">
-                      About
+                    <a class="navbar-item" href="http://localhost:5000/freshUser">
+                      개인 투표 현황 초기화
                     </a>
                     <a class="navbar-item">
                       Jobs
@@ -60,8 +61,10 @@
               <div class="navbar-end">
                 <div class="navbar-item">
                   <div class="buttons">
-                    <p>{{userSession}}</p> &nbsp;
-                    <a class="button is-light" href="http://localhost:5000/logout">
+                    <a class="button is-light">
+                      {{userSession}}
+                    </a>
+                    <a class="button is-primary" href="http://localhost:5000/logout">
                       로그아웃
                     </a>
                   </div>

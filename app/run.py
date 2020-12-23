@@ -240,37 +240,44 @@ blockchain = Blockchain()
 
 @ app.route('/tran/new', methods=['POST'])
 def new_tran():
-    print("session : ", session["username"])
-    candidate = request.form['candidate']
-    # jsonObj = json.dumps({'location': loc, 'name': name,
-    #                       'phone': phone}, ensure_ascii=False)
-    jsonObj = json.dumps({'candidate': candidate}, ensure_ascii=False)
-    jsonObj = json.loads(jsonObj)
-    # required = ['location', 'name', 'phone']
-    required = ['candidate']
-    if not all(k in jsonObj for k in required):
-        return 'Missing values', 400
 
-    # Create a new Transaction
-    # index = blockchain.new_transaction(
-    #     jsonObj['location'], jsonObj['name'], jsonObj['phone'])
-    index = blockchain.new_transaction(
-        jsonObj['candidate'])
+    res = getUserVote(session["username"])
 
-    db_class = db.Database()
-
-    sql = "UPDATE user SET voteWT = 'YES' WHERE userid = '%s'" % (
-        session["username"])
-    print(sql)
-    db_class.execute(sql)
-    db_class.commit()
-    # response = {'message': f'Transaction will be added to Block {index}'}
-    response = '🥳 투표해주셔서 감사합니다. 🥳'
-    # return jsonify(response), 201
-    if "username" in session:
-        return render_template('fin.html', response=response, userSession=session["username"])
+    if res:
+        response = '''alert(' %s님은 이미 투표를 완료했습니다.');''' % session["username"]
+        return render_template('index.html', response=response, userSession=session["username"])
     else:
-        return render_template('fin.html', response=response)
+        print("session : ", session["username"])
+        candidate = request.form['candidate']
+        # jsonObj = json.dumps({'location': loc, 'name': name,
+        #                       'phone': phone}, ensure_ascii=False)
+        jsonObj = json.dumps({'candidate': candidate}, ensure_ascii=False)
+        jsonObj = json.loads(jsonObj)
+        # required = ['location', 'name', 'phone']
+        required = ['candidate']
+        if not all(k in jsonObj for k in required):
+            return 'Missing values', 400
+
+        # Create a new Transaction
+        # index = blockchain.new_transaction(
+        #     jsonObj['location'], jsonObj['name'], jsonObj['phone'])
+        index = blockchain.new_transaction(
+            jsonObj['candidate'])
+
+        db_class = db.Database()
+
+        sql = "UPDATE user SET voteWT = 'YES' WHERE userid = '%s'" % (
+            session["username"])
+        print(sql)
+        db_class.execute(sql)
+        db_class.commit()
+        # response = {'message': f'Transaction will be added to Block {index}'}
+        response = '''alert('🥳 투표해주셔서 감사합니다. 🥳');'''
+        # return jsonify(response), 201
+        if "username" in session:
+            return render_template('index.html', response=response, userSession=session["username"])
+        else:
+            return render_template('index.html', response=response)
 
 
 # mine new block
@@ -290,9 +297,10 @@ def new_mine():
     #     'previous_hash': block['previous_hash'],
     # }
 
-    response = '{0}번째 블록이 생성되었습니다. proof={1}'.format(
+    response = '''alert('%s번째 블록이 생성되었습니다. proof=%s');''' % (
         block['index'], block['proof'])
     if "username" in session:
+        print(response)
         return render_template('index.html', response=response, userSession=session["username"])
     else:
         return render_template('index.html', response=response)
@@ -435,6 +443,19 @@ def loginProg():
 def logout():
     session.clear()
     return redirect("/", code=302)
+
+
+@app.route('/freshUser')
+def fresh():
+    db_class = db.Database()
+    sql = "UPDATE user SET voteWT = 'NO'"
+    db_class.execute(sql)
+    db_class.commit()
+    response = '''alert('초기화 완료!')'''
+    if "username" in session:
+        return render_template('index.html', response=response, userSession=session["username"])
+    else:
+        return render_template('index.html', response=response)
 
 
 if __name__ == '__main__':
