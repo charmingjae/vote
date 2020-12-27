@@ -13,3 +13,10 @@ function chkFormNull() {
     document.signupForm.submit();
   }
 }
+
+// 페이지가 렌더링이 된 후에 함수 실행
+$(document).ready(function () {
+  $("#userid").focusout(function () {
+    // $("#usermajor").val("컴퓨터학과");
+  });
+});

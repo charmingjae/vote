@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>😎 Vote 😎</title>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
         <link rel="stylesheet" href="../static/css/signup.css">
         <script src="../static/js/signup.js"></script>
@@ -14,9 +15,9 @@
         <form action="/signup/progress" method="POST" name="signupForm">
                 <div class="field">
                     <div class="control">
-                        <input class="input is-primary" type="number" placeholder="아이디" name="userid"><br/><br/>
-                        <input class="input is-primary" type="text" placeholder="패스워드" name="userpw"><br/><br/>
-                        <input class="input is-primary" type="text" placeholder="학과" value="" name="usermajor" disabled>
+                        <input class="input is-primary" type="number" placeholder="아이디" name="userid" id="userid"><br/><br/>
+                        <input class="input is-primary" type="password" placeholder="패스워드" name="userpw"><br/><br/>
+                        <input class="input is-primary" type="text" placeholder="학과" value="" name="usermajor" id="usermajor" disabled>
                     </div><br/>
                     <button type="button" class="button is-primary" onclick="chkFormNull()">Signup</button>
                 </div>
