@@ -7,6 +7,7 @@ from uuid import uuid4
 import requests
 import threading
 import datetime
+from operator import itemgetter
 from modules import db
 
 
@@ -315,8 +316,11 @@ def new_mine():
 
 @ app.route('/chain', methods=['GET'])
 def full_chain():
+    # sort block by index - descending
+    chains = sorted(blockchain.chain, key=(lambda x: x['index']), reverse=True)
     response = {
-        'chain': blockchain.chain,
+        # 'chain': blockchain.chain,
+        'chain': chains,
         'length': len(blockchain.chain),
     }
     return jsonify(response), 200
@@ -464,7 +468,7 @@ def logout():
     return redirect("/", code=302)
 
 
-@app.route('/freshUser')
+@ app.route('/freshUser')
 def fresh():
     db_class = db.Database()
     sql = "UPDATE user SET voteWT = 'NO'"
