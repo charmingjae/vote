@@ -14,8 +14,9 @@
         <form action="/signup/progress" method="POST" name="signupForm">
                 <div class="field">
                     <div class="control">
-                        <input class="input is-primary" type="text" placeholder="아이디" name="userid"><br/><br/>
-                        <input class="input is-primary" type="text" placeholder="패스워드" name="userpw">
+                        <input class="input is-primary" type="number" placeholder="아이디" name="userid"><br/><br/>
+                        <input class="input is-primary" type="text" placeholder="패스워드" name="userpw"><br/><br/>
+                        <input class="input is-primary" type="text" placeholder="학과" value="" name="usermajor" disabled>
                     </div><br/>
                     <button type="button" class="button is-primary" onclick="chkFormNull()">Signup</button>
                 </div>

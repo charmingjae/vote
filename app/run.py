@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 from uuid import uuid4
 import requests
 import threading
+import datetime
 from modules import db
 
 
@@ -300,8 +301,8 @@ def new_mine():
 
     # response = '''alert('%s번째 블록이 생성되었습니다. proof=%s');''' % (
     #     block['index'], block['proof'])
-    response = '''[ NOTICE ] %s번째 블록이 생성되었습니다. proof=%s''' % (
-        block['index'], block['proof'])
+    response = '''[ NOTICE ] %s번째 블록이 생성되었습니다. | proof=%s | transaction Length=%s |''' % (
+        block['index'], block['proof'], len(block['transactions']))
 
     print(response)
     threading.Timer(5, new_mine).start()
