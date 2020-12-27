@@ -404,7 +404,11 @@ def goSignup():
 def signupProg():
     # 폼 데이터 가져오기
     userid = request.form['userid']
+    print('USER MAJOR : ', userid)
     userpw = request.form['userpw']
+    print('USER MAJOR : ', userpw)
+    usermajor = request.form['usermajor']
+    print('USER MAJOR : ', usermajor)
 
     # 데이터베이스 생성자
     db_class = db.Database()
@@ -416,8 +420,8 @@ def signupProg():
         response = '''alert('이미 존재하는 아이디입니다.');'''
     else:
         # 2. 없으면 테이블에 인서트 하기
-        sql = "INSERT INTO user(userid, userpw) VALUES('%s','%s');" % (
-            userid, userpw)
+        sql = "INSERT INTO user(userid, userpw, major) VALUES('%s','%s','%s');" % (
+            userid, userpw, usermajor)
 
         db_class.execute(sql)
         db_class.commit()
