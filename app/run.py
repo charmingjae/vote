@@ -579,6 +579,12 @@ def start():
     return render_template('index.html')
 
 
+@app.route('/scope/<index>')
+def scope_index(index):
+    index = int(index)
+    return "{}".format(blockchain.chain[index-1])
+
+
 if __name__ == '__main__':
     from argparse import ArgumentParser
 
