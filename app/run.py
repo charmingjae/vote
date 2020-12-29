@@ -48,9 +48,10 @@ class Blockchain:
 
         while current_index < len(chain):
             block = chain[current_index]
-            print(f'{last_block}')
-            print(f'{block}')
-            print("\n-----------\n")
+            # print("\n=======================\n")
+            # print(f'{last_block}')
+            # print(f'{block}')
+            # print("\n=======================\n")
             # Check that the hash of the block is correct
             last_block_hash = self.hash(last_block)
             if block['previous_hash'] != last_block_hash:
@@ -81,8 +82,8 @@ class Blockchain:
         # Grab and verify the chains from all the nodes in our network
         for node in neighbours:
             response = requests.get(f'http://{node}/chain')
-
             if response.status_code == 200:
+
                 length = response.json()['length']
                 chain = response.json()['chain']
 
@@ -286,7 +287,14 @@ def new_tran():
 # mine new block
 # @ app.route('/mine/new', methods=['GET'])
 def new_mine():
-    blockchain.resolve_conflicts()
+    replaced = blockchain.resolve_conflicts()
+
+    if replaced:
+        print(':: Our chain was replaced ::')
+        # 'new_chain': blockchain.chain
+
+    else:
+        print(':: Our chain is representative ::')
 
     # 노드 검증
     last_block = blockchain.last_block
@@ -353,7 +361,7 @@ def new_mines():
 
 @ app.route('/chain', methods=['GET'])
 def full_chain():
-    # 노드 검증
+    # # 노드 검증
     # replaced = blockchain.resolve_conflicts()
 
     # if replaced:
@@ -363,7 +371,9 @@ def full_chain():
     # else:
     #     print(':: Our chain is representative ::')
     # sort block by index - descending
-    chains = sorted(blockchain.chain, key=(lambda x: x['index']), reverse=True)
+
+    # chains = sorted(blockchain.chain, key=(lambda x: x['index']), reverse=True)
+    chains = blockchain.chain
     response = {
         # 'chain': blockchain.chain,
         'chain': chains,
@@ -556,7 +566,11 @@ def scope():
         data.append(i)
     data_sort = data.sort(reverse=True)
     print(data_sort)
-    return render_template('scope.html', data=data)
+
+    if "username" in session:
+        return render_template('scope.html', data=data, userSession=session["username"])
+    else:
+        return render_template('scope.html', data=data)
 
 
 @app.route('/start')
@@ -573,7 +587,6 @@ if __name__ == '__main__':
                         type=int, help='port to listen on')
     args = parser.parse_args()
     port = args.port
-    # new_mine()
-    # app.run(host='0.0.0.0', port=port, debug=True,
-    #         use_reloader=False, threaded=True)
-    app.run(host='0.0.0.0', port=port, debug=True, threaded=True)
+    new_mine()
+    app.run(host='0.0.0.0', port=port, debug=True,
+            use_reloader=False, threaded=True)
