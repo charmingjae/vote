@@ -481,6 +481,14 @@ def fresh():
         return render_template('index.html', response=response)
 
 
+@app.route('/scope')
+def scope():
+    # data = sorted(blockchain.chain, key=(
+    #     lambda x: x['index']), reverse=True)
+    data = blockchain.chain[0]['index']
+    return render_template('scope.html', data=data)
+
+
 if __name__ == '__main__':
     new_mine()
     app.run(debug=True, use_reloader=False)
