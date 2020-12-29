@@ -6,8 +6,8 @@ from urllib.parse import urlparse
 from uuid import uuid4
 import requests
 import threading
-import datetime
 from operator import itemgetter
+import numpy as np
 from modules import db
 
 
@@ -286,6 +286,9 @@ def new_tran():
 # mine new block
 # @ app.route('/mine/new', methods=['GET'])
 def new_mine():
+    blockchain.resolve_conflicts()
+
+    # 노드 검증
     last_block = blockchain.last_block
     proof = blockchain.proof_of_work(last_block)
 
@@ -314,8 +317,51 @@ def new_mine():
     #     return render_template('index.html', response=response)
 
 
+@ app.route('/new_mines', methods=['GET'])
+def new_mines():
+    # blockchain.resolve_conflicts()
+
+    # 노드 검증
+    last_block = blockchain.last_block
+    proof = blockchain.proof_of_work(last_block)
+
+    previous_hash = blockchain.hash(last_block)
+    block = blockchain.new_block(proof, previous_hash)
+
+    # response = {
+    #     'message': "New Block Forged",
+    #     'index': block['index'],
+    #     'transactions': block['transactions'],
+    #     'proof': block['proof'],
+    #     'previous_hash': block['previous_hash'],
+    # }
+
+    # response = '''alert('%s번째 블록이 생성되었습니다. proof=%s');''' % (
+    #     block['index'], block['proof'])
+    response = '''[ NOTICE ] %s번째 블록이 생성되었습니다. | proof=%s | transaction Length=%s |''' % (
+        block['index'], block['proof'], len(block['transactions']))
+
+    print(response)
+    # threading.Timer(5, new_mine).start()
+    # if "username" in session:
+    #     print(response)
+    #     return render_template('index.html', response=response, userSession=session["username"])
+    # else:
+    #     return render_template('index.html', response=response)
+    return render_template('index.html')
+
+
 @ app.route('/chain', methods=['GET'])
 def full_chain():
+    # 노드 검증
+    # replaced = blockchain.resolve_conflicts()
+
+    # if replaced:
+    #     print(':: Our chain was replaced ::')
+    #     # 'new_chain': blockchain.chain
+
+    # else:
+    #     print(':: Our chain is representative ::')
     # sort block by index - descending
     chains = sorted(blockchain.chain, key=(lambda x: x['index']), reverse=True)
     response = {
@@ -350,22 +396,32 @@ def consensus():
     replaced = blockchain.resolve_conflicts()
 
     if replaced:
-        response = ':: Our chain was replaced ::'
+        print(':: Our chain was replaced ::')
         # 'new_chain': blockchain.chain
 
     else:
-        response = ':: Our chain is representative ::'
+        print(':: Our chain is representative ::')
         # 'chain': blockchain.chain
 
     # return jsonify(response), 200
     if "username" in session:
-        return render_template('index.html', response=response, userSession=session["username"])
+        return render_template('index.html')
     else:
-        return render_template('index.html', response=response)
+        return render_template('index.html')
 
 
 @ app.route('/total')
 def getTotal():
+    # 노드 검증
+    # replaced = blockchain.resolve_conflicts()
+
+    # if replaced:
+    #     print(':: Our chain was replaced ::')
+    #     # 'new_chain': blockchain.chain
+
+    # else:
+    #     print(':: Our chain is representative ::')
+
     chainLength = len(blockchain.chain)
     # test = blockchain.chain[2]['transactions']
 
@@ -483,12 +539,41 @@ def fresh():
 
 @app.route('/scope')
 def scope():
+    # 노드 검증
+    # replaced = blockchain.resolve_conflicts()
+
+    # if replaced:
+    #     print(':: Our chain was replaced ::')
+    #     # 'new_chain': blockchain.chain
+
+    # else:
+    #     print(':: Our chain is representative ::')
     # data = sorted(blockchain.chain, key=(
     #     lambda x: x['index']), reverse=True)
-    data = blockchain.chain[0]['index']
+    data = []
+    # data = np.array(np.arange(1, len(blockchain.chain)+1))
+    for i in range(1, len(blockchain.chain)+1):
+        data.append(i)
+    data_sort = data.sort(reverse=True)
+    print(data_sort)
     return render_template('scope.html', data=data)
 
 
-if __name__ == '__main__':
+@app.route('/start')
+def start():
     new_mine()
-    app.run(debug=True, use_reloader=False)
+    return render_template('index.html')
+
+
+if __name__ == '__main__':
+    from argparse import ArgumentParser
+
+    parser = ArgumentParser()
+    parser.add_argument('-p', '--port', default=5000,
+                        type=int, help='port to listen on')
+    args = parser.parse_args()
+    port = args.port
+    # new_mine()
+    # app.run(host='0.0.0.0', port=port, debug=True,
+    #         use_reloader=False, threaded=True)
+    app.run(host='0.0.0.0', port=port, debug=True, threaded=True)

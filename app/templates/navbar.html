@@ -9,7 +9,7 @@
     <body>
         <nav class="navbar" role="navigation" aria-label="main navigation">
             <div class="navbar-brand">
-              <a class="navbar-item" href="http://localhost:5000/">
+              <a class="navbar-item" href="/">
                 <!-- <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28"> -->
                 <img src="https://sports.chosun.com/news/html/2020/11/03/2020110401000235000014922.jpg" width="112" height="28">
               </a>
@@ -27,16 +27,24 @@
                   Mine
                 </a> -->
           
-                <a class="navbar-item" href="http://localhost:5000/chain">
+                <a class="navbar-item" href="/chain">
                   Chain
                 </a>
 
-                <a class="navbar-item" href="http://localhost:5000/total">
+                <a class="navbar-item" href="/total">
                   통계
                 </a>
 
-                <a class="navbar-item" href="http://localhost:5000/scope">
+                <a class="navbar-item" href="/scope">
                   SCOPE
+                </a>
+
+                <a class="navbar-item" href="/start">
+                  시작
+                </a>
+
+                <a class="navbar-item" href="/new_mines">
+                  마인
                 </a>
           
                 <div class="navbar-item has-dropdown is-hoverable">
@@ -45,7 +53,7 @@
                   </a>
           
                   <div class="navbar-dropdown">
-                    <a class="navbar-item" href="http://localhost:5000/freshUser">
+                    <a class="navbar-item" href="/freshUser">
                       개인 투표 현황 초기화
                     </a>
                     <a class="navbar-item">
@@ -68,7 +76,7 @@
                     <a class="button is-light">
                       {{userSession}}
                     </a>
-                    <a class="button is-primary" href="http://localhost:5000/logout">
+                    <a class="button is-primary" href="/logout">
                       로그아웃
                     </a>
                   </div>
@@ -78,10 +86,10 @@
               <div class="navbar-end">
                 <div class="navbar-item">
                   <div class="buttons">
-                    <a class="button is-primary" href="http://localhost:5000/signup">
+                    <a class="button is-primary" href="/signup">
                       <strong>Sign up</strong>
                     </a>
-                    <a class="button is-light" href="http://localhost:5000/login">
+                    <a class="button is-light" href="/login">
                       Log in
                     </a>
                   </div>

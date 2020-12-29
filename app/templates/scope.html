@@ -14,7 +14,10 @@
 
 
         scope<br/>
-        {{data}}
+        <!-- {{data}} -->
+        {% for i in data %}
+            <a>{{i}}</a><br/>
+        {% endfor %}
         <div id="objDiv">
 
         </div>
