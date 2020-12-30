@@ -6,12 +6,3 @@
     margin-left:auto; 
     margin-right:auto;
 }
-
-
-.is-hoverable>tbody>tr>td :hover{
-    background:blue;
-}
-
-a{
-    text-decoration: none !important;
-}
