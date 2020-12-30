@@ -8,6 +8,7 @@ import requests
 import threading
 from operator import itemgetter
 import numpy as np
+import datetime
 from modules import db
 
 
@@ -109,7 +110,8 @@ class Blockchain:
 
         block = {
             'index': len(self.chain) + 1,
-            'timestamp': time(),
+            # 'timestamp': time(),
+            'timestamp': str(datetime.datetime.now()),
             'transactions': self.current_transactions,
             'proof': proof,
             'previous_hash': previous_hash or self.hash(self.chain[-1]),
@@ -566,11 +568,11 @@ def scope():
         data.append(i)
     data_sort = data.sort(reverse=True)
     print(data_sort)
-
+    chains = blockchain.chain
     if "username" in session:
-        return render_template('scope.html', data=data, userSession=session["username"])
+        return render_template('scope.html', data=data, userSession=session["username"], chain=chains)
     else:
-        return render_template('scope.html', data=data)
+        return render_template('scope.html', data=data, chain=chains)
 
 
 @app.route('/start')
@@ -582,7 +584,10 @@ def start():
 @app.route('/scope/<index>')
 def scope_index(index):
     index = int(index)
-    return "{}".format(blockchain.chain[index-1])
+    response = '''
+        {0} <br/> {1} <br/> {2} <br/> {3}
+    '''.format(blockchain.chain[index-1]['timestamp'], blockchain.chain[index-1]['proof'], blockchain.chain[index-1]['transactions'], blockchain.chain[index-1]['previous_hash'])
+    return "{}".format(response)
 
 
 if __name__ == '__main__':

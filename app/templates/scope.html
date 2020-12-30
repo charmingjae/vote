@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>😎 Vote 😎</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+        <link rel="stylesheet" type="text/css" href="../static/css/scope.css">
         <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <script src="../static/js/scope.js"></script>
         <!-- <link rel="stylesheet" type="text/css" href="../static/css/index.css"> -->
@@ -13,13 +14,34 @@
         {% include 'navbar.html' %}
 
 
-        scope<br/>
-        <!-- {{data}} -->
-        {% for i in data %}
-            <a id="{{i}}" href="/scope/{{i}}">{{i}}</a><br/>
-        {% endfor %}
-        <div id="objDiv">
 
+        <div class="container">
+        <table class="table center is-hoverable">
+            <thead>
+              <tr>
+                <th>#BLOCK</th>
+                <th>TIME</th>
+                <th>LENGTH</th>
+              </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>#BLOCK</th>
+                    <th>TIME</th>
+                    <th>LENGTH</th>
+                  </tr>
+            </tfoot>
+            <tbody>
+                {% for i in data %}
+                <tr>
+                    <th><a title="{{i}}" id="{{i}}" href="/scope/{{i}}">{{i}}</a></th>
+                    <td>{{chain[i-1]['timestamp'][:19]}}</td>
+                    <td>{{chain[i-1]['transactions']|length}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+          </table>
         </div>
+
     </body>
 </html>
