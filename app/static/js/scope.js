@@ -1,17 +1,17 @@
-$(document).ready(
-  setInterval(function () {
-    var newTag = document.createElement("a");
+// $(document).ready(
+//   setInterval(function () {
+//     var newTag = document.createElement("a");
 
-    newTag.setAttribute("name", "aName");
-    newTag.innerText = "Hello!";
+//     newTag.setAttribute("name", "aName");
+//     newTag.innerText = "Hello!";
 
-    //   document.body.appendChild(newTag);
+//     //   document.body.appendChild(newTag);
 
-    basicForm = document.getElementById("objDiv");
+//     basicForm = document.getElementById("objDiv");
 
-    basicForm.appendChild(newTag);
-  }, 3000)
-);
+//     basicForm.appendChild(newTag);
+//   }, 3000)
+// );
 
 function page() {
   $("table").each(function () {
@@ -135,11 +135,11 @@ function page() {
 
       // [1,2,3,4,5,6,7,8]
 
+      // wrap a component at <li> tag
       for (var page = nowp; page < endp; page++) {
         // <span class="pageNum"></span>
         $('<a class="pageNum pagination-link"></a>')
           .text(page + 1)
-          .wrapAll("<li></li>")
           .bind("click", { newPage: page }, function (event) {
             currentPage = event.data["newPage"];
 
@@ -151,7 +151,8 @@ function page() {
               .removeClass("active");
           })
           .appendTo(pagination)
-          .addClass("clickable");
+          .addClass("clickable")
+          .wrap("<li></li>");
       }
 
       // [다음]
