@@ -15,7 +15,7 @@
 
 function page() {
   $("table").each(function () {
-    var pagesu = 10; //페이지 번호 갯수
+    var pagesu = 5; //페이지 번호 갯수
 
     var currentPage = 0;
 
@@ -61,14 +61,14 @@ function page() {
       if (numPages > 1) {
         // 한페이지 이상이면
 
-        if (currentPage < 5 && numPages - currentPage >= 5) {
+        if (currentPage < 4 && numPages - currentPage >= 4) {
           // 현재 5p 이하이면
 
           nowp = 0; // 1부터
 
           endp = pagesu; // 10까지
         } else {
-          nowp = currentPage - 5; // 6넘어가면 2부터 찍고
+          nowp = currentPage - 4; // 6넘어가면 2부터 찍고
 
           endp = nowp + pagesu; // 10까지
 
