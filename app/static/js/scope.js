@@ -99,7 +99,7 @@ function page() {
       // [처음]
       // <a class="pageNum pagination-link"></a>
       // <span class="pageNum first">처음</span>
-      $('<a class="pageNum first pagination-link">처음</a>')
+      $('<a class="pageNum first pagination-link paging">처음</a>')
         .bind("click", { newPage: page }, function (event) {
           currentPage = 0;
 
@@ -116,7 +116,7 @@ function page() {
       // [이전]
 
       $(
-        '<a class="pagination-previous" title="This is the first page">Previous</a>'
+        '<a class="pagination-previous paging" title="This is the first page">Previous</a>'
       )
         .bind("click", { newPage: page }, function (event) {
           if (currentPage == 0) return;
@@ -138,7 +138,7 @@ function page() {
       // wrap a component at <li> tag
       for (var page = nowp; page < endp; page++) {
         // <span class="pageNum"></span>
-        $('<a class="pageNum pagination-link"></a>')
+        $('<a class="pageNum pagination-link paging"></a>')
           .text(page + 1)
           .bind("click", { newPage: page }, function (event) {
             currentPage = event.data["newPage"];
@@ -157,7 +157,7 @@ function page() {
 
       // [다음]
 
-      $('<a class="pageNum next pagination-link">다음</a>')
+      $('<a class="pageNum next pagination-link paging">다음</a>')
         .bind("click", { newPage: page }, function (event) {
           if (currentPage == numPages - 1) return;
 
@@ -175,7 +175,7 @@ function page() {
 
       // [끝]
 
-      $('<a class="pageNum last pagination-link">끝</a>')
+      $('<a class="pageNum last pagination-link paging">끝</a>')
         .bind("click", { newPage: page }, function (event) {
           currentPage = numPages - 1;
 

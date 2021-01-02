@@ -5,14 +5,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>😎 Vote 😎</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <link rel="stylesheet" type="text/css" href="../static/css/index.css">
+        <script src="../static/js/index.js"></script>
     </head>
     <body>
         {% include 'navbar.html' %}
 
         <div class="container index_container">
             <div class="buttons is-centered">
-                <button class="button is-primary" onclick="location.href='/vote'">&nbsp;&nbsp;🥳&nbsp;&nbsp;</button>
+                <button class="button is-primary" onclick="location.href='/vote'" id="btnVote">&nbsp;&nbsp;🥳&nbsp;&nbsp;</button>
             </div>
         </div>
 
