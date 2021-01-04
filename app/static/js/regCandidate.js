@@ -1,16 +1,25 @@
 $(document).ready(function () {
   $("#btnSubmit").click(function () {
-    var topCan = document.getElementById("top_stuPresident").value;
-    var secCan1 = document.getElementById("sec_stuPresident1").value;
-    var secCan2 = document.getElementById("sec_stuPresident2").value;
     var msgCandidate = document.getElementById("msgCandidate").value;
-    var length = document.getElementsByName("candidate_name").length;
-    var arr = [];
+    var nameLength = document.getElementsByName("candidate_name").length;
+    var selLength = document.getElementsByName("stuPresident_dep").length;
+    console.log(selLength);
+    var nameArr = [];
+    var depArr = [];
 
-    for (var i = 0; i < length; i++) {
+    for (var i = 0; i < nameLength; i++) {
       var nameCandidate = document.getElementsByName("candidate_name")[i].value;
       if (nameCandidate === (undefined || null || "")) {
         alert("후보자 이름을 입력하세요.");
+        return false;
+      }
+    }
+
+    for (var i = 0; i < selLength; i++) {
+      var candDep = document.getElementsByName("stuPresident_dep")[i].value;
+      console.log(candDep);
+      if (candDep === (undefined || null || "")) {
+        alert("후보자의 학과를 선택하세요.");
         return false;
       }
     }
@@ -19,20 +28,34 @@ $(document).ready(function () {
       alert("공약을 입력하세요.");
       return false;
     } else {
-      for (var i = 0; i < length; i++) {
-        arr.push(document.getElementsByName("candidate_name")[i].value);
+      for (var i = 0; i < nameLength; i++) {
+        nameArr.push(document.getElementsByName("candidate_name")[i].value);
       }
-      alert(
-        "총 학생 회장 후보 : " +
-          arr[0] +
-          "\n부 학생 회장 후보1: " +
-          arr[1] +
-          "\n부 학생 회장 후보2 : " +
-          arr[2] +
-          "\n후보자 공약 : \n" +
-          msgCandidate
-      );
-      return false;
+      for (var i = 0; i < selLength; i++) {
+        depArr.push(document.getElementsByName("stuPresident_dep")[i].value);
+      }
+      if (
+        confirm(
+          "총 학생 회장 후보 : " +
+            nameArr[0] +
+            "\n총 학생 회장 학과 : " +
+            depArr[0] +
+            "\n\n부 학생 회장 후보1: " +
+            nameArr[1] +
+            "\n부 학생 회장 후보1 학과 : " +
+            depArr[1] +
+            "\n\n부 학생 회장 후보2 : " +
+            nameArr[2] +
+            "\n부 학생 회장 후보2 학과 : " +
+            depArr[2] +
+            "\n\n후보자 공약 : \n" +
+            msgCandidate
+        )
+      ) {
+        document.regCandidateForm.submit();
+      } else {
+        return false;
+      }
     }
   });
 });
