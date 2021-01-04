@@ -32,9 +32,11 @@
         </form> -->
         <br/>
         {% if userSession %}
-                    <p> {{userSession}} 아이디로 투표 중 입니다.</p>
+                    <p class="is-centered"> {{userSession}} 아이디로 투표 중 입니다.</p>
         {% else %}
         {% endif %}
+
+        {{response[0]['cand1']}}
         <br/><br/><br/>
         <section class="content tiles">
             <div class="container">
@@ -47,6 +49,26 @@
                                 <p class="subtitle is-4 is-marginless">첫 번째 후보자입니다.</p>
                             </a>
                             <!-- <input type="radio" name="candidate" value="1"/> -->
+                        </div>
+                    </form>
+                    <form action="/tran/new" method="POST" class="column" name="voteForm2">
+                        <input type="hidden" name="candidate" value="2"/>
+                        <div id="2" onclick="vote2(this)">
+                            <a class="box social" target="_blank">
+                                <p class="title is-2">Candidate 2</p>
+                                <p class="subtitle is-4 is-marginless">두 번째 후보자입니다.</p>
+                            </a>
+                            <!-- <input type="radio" name="candidate" value="2"/> -->
+                        </div>
+                    </form>
+                    <form action="/tran/new" method="POST" class="column" name="voteForm2">
+                        <input type="hidden" name="candidate" value="2"/>
+                        <div id="2" onclick="vote2(this)">
+                            <a class="box social" target="_blank">
+                                <p class="title is-2">Candidate 2</p>
+                                <p class="subtitle is-4 is-marginless">두 번째 후보자입니다.</p>
+                            </a>
+                            <!-- <input type="radio" name="candidate" value="2"/> -->
                         </div>
                     </form>
                     <form action="/tran/new" method="POST" class="column" name="voteForm2">

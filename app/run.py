@@ -218,7 +218,10 @@ def hellohtml():
             response = '''alert(' %s님은 이미 투표를 완료했습니다.');''' % session["username"]
             return render_template('index.html', response=response, userSession=session["username"])
         else:
-            return render_template('vote.html', response=None, userSession=session["username"])
+            db_class = db.Database()
+            sql = "SELECT cand1 FROM candidate"
+            row = db_class.executeAll(sql)
+            return render_template('vote.html', response=row, userSession=session["username"])
     else:
         return render_template('login.html', response=None)
 
@@ -593,6 +596,25 @@ def scope_index(index):
 @app.route('/regCandidate')
 def register_candidate():
     return render_template('regCandidate.html')
+
+
+@app.route('/regCandidate/progress', methods=['POST'])
+def reg_candidate_progress():
+    lst_candName = request.form.getlist('candidate_name')
+    lst_candDep = request.form.getlist('stuPresident_dep')
+    cand_msg = request.form['msgCandidate']
+    print(lst_candName)
+    print(lst_candDep)
+    print(cand_msg)
+    # 데이터베이스 생성자
+    db_class = db.Database()
+    sql = "INSERT INTO candidate(cand1, cand1_dep, cand2, cand2_dep, cand3, cand3_dep, candMsg) VALUES('%s','%s','%s', '%s','%s','%s','%s');" % (
+        lst_candName[0], lst_candDep[0], lst_candName[1], lst_candDep[1], lst_candName[2], lst_candDep[2], cand_msg)
+
+    db_class.execute(sql)
+    db_class.commit()
+
+    return render_template('index.html')
 
 
 if __name__ == '__main__':
