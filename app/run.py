@@ -219,7 +219,7 @@ def hellohtml():
             return render_template('index.html', response=response, userSession=session["username"])
         else:
             db_class = db.Database()
-            sql = "SELECT cand1 FROM candidate"
+            sql = "SELECT * FROM candidate"
             row = db_class.executeAll(sql)
             return render_template('vote.html', response=row, userSession=session["username"])
     else:
@@ -427,16 +427,6 @@ def consensus():
 
 @ app.route('/total')
 def getTotal():
-    # 노드 검증
-    # replaced = blockchain.resolve_conflicts()
-
-    # if replaced:
-    #     print(':: Our chain was replaced ::')
-    #     # 'new_chain': blockchain.chain
-
-    # else:
-    #     print(':: Our chain is representative ::')
-
     chainLength = len(blockchain.chain)
     # test = blockchain.chain[2]['transactions']
 

@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>😎 Vote 😎</title>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
         <link rel="stylesheet" type="text/css" href="../static/css/vote.css">
         <script src="../static/js/vote.js"></script>
@@ -36,51 +37,39 @@
         {% else %}
         {% endif %}
 
-        {{response[0]['cand1']}}
+        <!-- {% for i in response %}
+            <a>{{i}}</a><br/>
+            <a>{{i['cand1']}}</a><br/>
+        {% endfor %} -->
         <br/><br/><br/>
         <section class="content tiles">
             <div class="container">
                 <div class="columns">
-                    <form action="/tran/new" method="POST" class="column" name="voteForm1">
-                        <input type="hidden" name="candidate" value="1"/>
-                        <div id="1" onclick="vote1(this)">
+        {% for i in response %}
+                    <form action="/tran/new" method="POST" class="column" name="voteForm{{i['idx']}}" id="{{i['idx']}}" onclick="vote(this)">
+                        <input type="hidden" name="candidate" value="{{i['idx']}}"/>
+                        <div>
                             <a class="box social" target="_blank">
-                                <p class="title is-2">Candidate 1</p>
-                                <p class="subtitle is-4 is-marginless">첫 번째 후보자입니다.</p>
+                                <p class="title is-2">기호 {{i['idx']}}</p>
+                                <p class="subtitle is-5 is-marginless"><b>총 학생 회장 후보</b> : {{i['cand1']}} ({{i['cand1_dep']}})</p><br/>
+                                <p class="subtitle is-5 is-marginless"><b>부 학생 회장 후보1</b> : {{i['cand2']}} ({{i['cand2_dep']}})</p><br/>
+                                <p class="subtitle is-5 is-marginless"><b>부 학생 회장 후보2</b> : {{i['cand3']}} ({{i['cand3_dep']}})</p><br/><br/>
+                                <p class="subtitle is-5 is-marginless" style="text-align: center;"><b>후보자 공약</b></p><br/>
+                                <div class="box">
+
+                                      
+                                        <div class="content">
+                                          <p>
+                                            {{i['candMsg']}}
+                                          </p>
+                                        </div>
+                                        
+                                  </div>
                             </a>
                             <!-- <input type="radio" name="candidate" value="1"/> -->
                         </div>
                     </form>
-                    <form action="/tran/new" method="POST" class="column" name="voteForm2">
-                        <input type="hidden" name="candidate" value="2"/>
-                        <div id="2" onclick="vote2(this)">
-                            <a class="box social" target="_blank">
-                                <p class="title is-2">Candidate 2</p>
-                                <p class="subtitle is-4 is-marginless">두 번째 후보자입니다.</p>
-                            </a>
-                            <!-- <input type="radio" name="candidate" value="2"/> -->
-                        </div>
-                    </form>
-                    <form action="/tran/new" method="POST" class="column" name="voteForm2">
-                        <input type="hidden" name="candidate" value="2"/>
-                        <div id="2" onclick="vote2(this)">
-                            <a class="box social" target="_blank">
-                                <p class="title is-2">Candidate 2</p>
-                                <p class="subtitle is-4 is-marginless">두 번째 후보자입니다.</p>
-                            </a>
-                            <!-- <input type="radio" name="candidate" value="2"/> -->
-                        </div>
-                    </form>
-                    <form action="/tran/new" method="POST" class="column" name="voteForm2">
-                        <input type="hidden" name="candidate" value="2"/>
-                        <div id="2" onclick="vote2(this)">
-                            <a class="box social" target="_blank">
-                                <p class="title is-2">Candidate 2</p>
-                                <p class="subtitle is-4 is-marginless">두 번째 후보자입니다.</p>
-                            </a>
-                            <!-- <input type="radio" name="candidate" value="2"/> -->
-                        </div>
-                    </form>
+        {% endfor %}
                 </div>
             </div>
         </section>
