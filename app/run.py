@@ -590,6 +590,11 @@ def scope_index(index):
     return "{}".format(response)
 
 
+@app.route('/regCandidate')
+def register_candidate():
+    return render_template('regCandidate.html')
+
+
 if __name__ == '__main__':
     from argparse import ArgumentParser
 
