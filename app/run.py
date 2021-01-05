@@ -427,8 +427,18 @@ def consensus():
 
 @ app.route('/total')
 def getTotal():
+    # 현재 블록체인 길이
     chainLength = len(blockchain.chain)
-    # test = blockchain.chain[2]['transactions']
+
+    # 데이터베이스에서 현재 후보자 수 가져오기
+    db_class = db.Database()
+    sql = "SELECT COUNT(*) FROM candidate"
+    row = db_class.executeAll(sql)
+    # USE row[0]['COUNT(*)']
+    candArr = []
+    for i in range(0, row[0]['COUNT(*)']):
+        candArr.append(0)
+    print(candArr)
 
     candidate_1 = 0
     candidate_2 = 0
@@ -438,26 +448,28 @@ def getTotal():
         total_len = total_len + \
             len(blockchain.chain[blockLength]['transactions'])
         for tranLength in range(len(blockchain.chain[blockLength]['transactions'])):
-            if blockchain.chain[blockLength]['transactions'][tranLength]['candidate'] == '1':
-                candidate_1 = candidate_1 + 1
-            else:
-                candidate_2 = candidate_2 + 1
+            candNum = int(blockchain.chain[blockLength]
+                          ['transactions'][tranLength]['candidate'])
+            candArr[candNum-1] = candArr[candNum-1]+1
 
-    print('candidate 1 : ', candidate_1)
-    print('candidate_2 : ', candidate_2)
+    print(candArr)
     print('총 투표자 수 : ', total_len)
 
-    if candidate_1 > candidate_2:
-        superiority = '1번 후보자 우세'
-    elif candidate_2 > candidate_1:
-        superiority = '2번 후보자 우세'
-    else:
-        superiority = '박빙!'
+    max = candArr[0]
+    maxIdx = 0
+    superiority = ''
+    for i in range(1, len(candArr)):
+        if max < candArr[i]:
+            max = candArr[i]
+            maxIdx = i+1
+            superiority = str(maxIdx)+'번 후보자가 우세!'
+        elif max == candArr[i]:
+            superiority = '박빙!'
 
     if "username" in session:
-        return render_template('total.html', chainLength=chainLength, candidate_1=candidate_1, candidate_2=candidate_2, total_len=total_len, superiority=superiority, userSession=session["username"])
+        return render_template('total.html', chainLength=chainLength, candData=candArr, total_len=total_len, superiority=superiority, userSession=session["username"])
     else:
-        return render_template('total.html', chainLength=chainLength, candidate_1=candidate_1, candidate_2=candidate_2, total_len=total_len, superiority=superiority)
+        return render_template('total.html', chainLength=chainLength, candData=candArr, total_len=total_len, superiority=superiority)
 
 
 @ app.route('/signup')
