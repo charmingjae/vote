@@ -221,7 +221,10 @@ def hellohtml():
             db_class = db.Database()
             sql = "SELECT * FROM candidate"
             row = db_class.executeAll(sql)
-            return render_template('vote.html', response=row, userSession=session["username"])
+
+            sql = "SELECT auth FROM user WHERE userid = %s" % session["username"]
+            userAuth = db_class.executeAll(sql)
+            return render_template('vote.html', response=row, userSession=session["username"], userAuth=userAuth[0]['auth'])
     else:
         return render_template('login.html', response=None)
 

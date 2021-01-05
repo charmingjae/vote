@@ -27,23 +27,15 @@
 function vote(elem) {
   var conf = confirm(elem.id + " 번 후보에게 투표하시겠습니까?");
   console.log(elem.id.toString());
-  if (conf) {
+  if (conf == true) {
     var frmName = document.getElementById(elem.id);
     console.log(frmName);
     document.getElementById(elem.id).submit();
+  } else {
+    return false;
   }
 }
 
-function vote1(elem) {
-  var conf = confirm(elem.id + " 번 후보에게 투표하시겠습니까?");
-  if (conf) {
-    document.voteForm1.submit();
-  }
-}
-
-function vote2(elem) {
-  var conf = confirm(elem.id + " 번 후보에게 투표하시겠습니까?");
-  if (conf) {
-    document.voteForm2.submit();
-  }
+function alt() {
+  alert("hello");
 }

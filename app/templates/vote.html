@@ -33,7 +33,8 @@
         </form> -->
         <br/>
         {% if userSession %}
-                    <p class="is-centered"> {{userSession}} 아이디로 투표 중 입니다.</p>
+                    <p> {{userSession}} 아이디로 투표 중 입니다.</p>
+                    <p>{{userAuth}}</p>
         {% else %}
         {% endif %}
 
