@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, jsonify, redirect, session, escape
+from flask import Flask, request, render_template, jsonify, redirect, session, escape, url_for
 import hashlib
 import json
 from time import time
@@ -620,6 +620,33 @@ def reg_candidate_progress():
     db_class.commit()
 
     return render_template('index.html')
+
+
+@app.route('/manageCandidate')
+def manage():
+    db_class = db.Database()
+    sql = "SELECT * FROM candidate"
+    row = db_class.executeAll(sql)
+
+    return render_template('manage.html', data=row)
+
+
+@app.route('/manageCandidate/progress', methods=['GET'])
+def manage_process():
+    num = int(request.args.get('candNum'))
+    print('num : ', num)
+    activity = int(request.args.get('act'))
+    print('activity : ', activity)
+    if activity == 1:
+        # delete
+        db_class = db.Database()
+        sql = "DELETE FROM candidate where idx = %s" % num
+        print(sql)
+        db_class.execute(sql)
+        db_class.commit()
+        return redirect('/manageCandidate?flag=1')
+    if activity == 2:
+        pass
 
 
 if __name__ == '__main__':

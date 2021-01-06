@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>😎 Vote 😎</title>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+        <script src="../static/js/manage.js"></script>
+    </head>
+    <body>
+        {% include 'navbar.html' %}
+
+        <section class="hero is-success">
+            <div class="hero-body">
+              <div class="container">
+                <h1 class="title">
+                  후보자 등록 관리
+                </h1>
+                <h2 class="subtitle">
+                  Manage candidate
+                </h2>
+              </div>
+            </div>
+        </section>
+        <br/><br/><br/>
+
+        <!--box-->
+        <form action="/manageCandidate/progress" name="mngForm" id="mngForm_id" onsubmit="return false;">
+          <div class="columns">
+            <div class="column box is-half is-offset-one-quarter">
+              {% if data %}
+                {% for i in data %}
+                  <!-- {% if i|length == 0 %}
+                    등록된 후보자가 없습니다.
+                  {% else %}
+                    
+                  {% endif %} -->
+                  <input type="radio" name="candNum" value="{{i['idx']}}"><span>기호 {{i['idx']}}번 | {{i['cand1']}}({{i['cand1_dep']}}) | {{i['cand2']}}({{i['cand2_dep']}}) | {{i['cand3']}}({{i['cand3_dep']}})</span><br/><br/>
+                {% endfor %}
+              {% else %}
+                    등록된 후보자가 없습니다.
+              {% endif %}
+              
+              <div class="buttons is-right">
+                <button type="button" class="button is-info is-light" onclick="mngModify();">수정</button>
+                <button type="button" class="button is-danger is-light" onclick="mngDelete();">삭제</button>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        {% if datas %}
+          {{datas}}
+        {% endif %}
+          
+    </body>
+</html>
