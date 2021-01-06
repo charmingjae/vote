@@ -437,42 +437,49 @@ def getTotal():
     db_class = db.Database()
     sql = "SELECT COUNT(*) FROM candidate"
     row = db_class.executeAll(sql)
-    # USE row[0]['COUNT(*)']
-    candArr = []
-    for i in range(0, row[0]['COUNT(*)']):
-        candArr.append(0)
-    print(candArr)
 
-    candidate_1 = 0
-    candidate_2 = 0
-    total_len = 0
-
-    for blockLength in range(chainLength):
-        total_len = total_len + \
-            len(blockchain.chain[blockLength]['transactions'])
-        for tranLength in range(len(blockchain.chain[blockLength]['transactions'])):
-            candNum = int(blockchain.chain[blockLength]
-                          ['transactions'][tranLength]['candidate'])
-            candArr[candNum-1] = candArr[candNum-1]+1
-
-    print(candArr)
-    print('총 투표자 수 : ', total_len)
-
-    max = candArr[0]
-    maxIdx = 0
-    superiority = ''
-    for i in range(1, len(candArr)):
-        if max < candArr[i]:
-            max = candArr[i]
-            maxIdx = i+1
-            superiority = str(maxIdx)+'번 후보자가 우세!'
-        elif max == candArr[i]:
-            superiority = '박빙!'
-
-    if "username" in session:
-        return render_template('total.html', chainLength=chainLength, candData=candArr, total_len=total_len, superiority=superiority, userSession=session["username"])
+    if row[0]['COUNT(*)'] == 0:
+        flag = False
+        if "username" in session:
+            return render_template('total.html', flag=flag, userSession=session["username"])
+        else:
+            return render_template('total.html', flag=flag)
     else:
-        return render_template('total.html', chainLength=chainLength, candData=candArr, total_len=total_len, superiority=superiority)
+        flag = True
+        # USE row[0]['COUNT(*)']
+        candArr = []
+        for i in range(0, row[0]['COUNT(*)']):
+            candArr.append(0)
+        print(candArr)
+
+        total_len = 0
+
+        for blockLength in range(chainLength):
+            total_len = total_len + \
+                len(blockchain.chain[blockLength]['transactions'])
+            for tranLength in range(len(blockchain.chain[blockLength]['transactions'])):
+                candNum = int(blockchain.chain[blockLength]
+                              ['transactions'][tranLength]['candidate'])
+                candArr[candNum-1] = candArr[candNum-1]+1
+
+        print(candArr)
+        print('총 투표자 수 : ', total_len)
+
+        max = candArr[0]
+        maxIdx = 0
+        superiority = ''
+        for i in range(1, len(candArr)):
+            if max < candArr[i]:
+                max = candArr[i]
+                maxIdx = i+1
+                superiority = str(maxIdx)+'번 후보자가 우세!'
+            elif max == candArr[i]:
+                superiority = '박빙!'
+
+        if "username" in session:
+            return render_template('total.html', flag=flag, chainLength=chainLength, candData=candArr, total_len=total_len, superiority=superiority, userSession=session["username"])
+        else:
+            return render_template('total.html', flag=flag, chainLength=chainLength, candData=candArr, total_len=total_len, superiority=superiority)
 
 
 @ app.route('/signup')
