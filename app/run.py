@@ -665,6 +665,28 @@ def modify_candidate(candNum):
     return render_template('modCandidate.html', data=row)
 
 
+@app.route('/modCandidate/progress', methods=['POST'])
+def mod_candidate_progress():
+    candNum = request.form.get('candNum')
+    lst_candName = request.form.getlist('candidate_name')
+    lst_candDep = request.form.getlist('stuPresident_dep')
+    cand_msg = request.form['msgCandidate']
+    print(candNum)
+    print(lst_candName)
+    print(lst_candDep)
+    print(cand_msg)
+    # 데이터베이스 생성자
+    db_class = db.Database()
+    sql = "UPDATE candidate SET cand1='%s', cand1_dep='%s', cand2='%s', cand2_dep='%s', cand3='%s', cand3_dep='%s', candMsg='%s' WHERE idx='%s';" % (
+        lst_candName[0], lst_candDep[0], lst_candName[1], lst_candDep[1], lst_candName[2], lst_candDep[2], cand_msg, candNum)
+    print(sql)
+
+    db_class.execute(sql)
+    db_class.commit()
+
+    return render_template('index.html')
+
+
 if __name__ == '__main__':
     from argparse import ArgumentParser
 

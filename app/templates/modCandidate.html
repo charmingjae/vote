@@ -6,8 +6,7 @@
         <title>😎 Vote 😎</title>
         <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
-        <link rel="stylesheet" type="text/css" href="../static/css/regCandidate.css">
-        <script src="../static/js/regCandidate.js"></script>
+        <script src="../../static/js/modCandidate.js"></script>
     </head>
     <body>
         {% include 'navbar.html' %}
@@ -26,7 +25,7 @@
         </section>
         <br/><br/>
 
-        <form action="/regCandidate/progress" method="POST" name="regCandidateForm">
+        <form action="/modCandidate/progress" method="POST" name="modCandidateForm" id="modCandidateForm_id">
         <div class="columns is-centered">
             <div class="column is-one-third">
                 <div class="field">
@@ -37,8 +36,8 @@
                         </div>
                         <div style="float:right;">
                                 <div class="select">
-                                    <select id="top_stuPresident_dep" name="stuPresident_dep" value="{{data[0]['cand1_dep']}}">
-                                        <option disabled value="">학과를 선택하세요</option>
+                                    <select id="top_stuPresident_dep" name="stuPresident_dep">
+                                        <option selected disabled value="">학과를 선택하세요</option>
                                         <option value="컴퓨터시스템과">컴퓨터시스템과</option>
                                         <option value="컴퓨터정보과">컴퓨터정보과</option>
                                         <option value="항공운항과">항공운항과</option>
@@ -56,8 +55,8 @@
                         </div>
                         <div style="float:right;">
                                 <div class="select">
-                                    <select id="sec_stuPresident1_dep" name="stuPresident_dep" value="{{data[0]['cand2_dep']}}">
-                                        <option disabled value="">학과를 선택하세요</option>
+                                    <select id="sec_stuPresident1_dep" name="stuPresident_dep">
+                                        <option selected disabled value="">학과를 선택하세요</option>
                                         <option value="컴퓨터시스템과">컴퓨터시스템과</option>
                                         <option value="컴퓨터정보과">컴퓨터정보과</option>
                                         <option value="항공운항과">항공운항과</option>
@@ -75,8 +74,8 @@
                         </div>
                         <div style="float:right;">
                                 <div class="select">
-                                    <select id="sec_stuPresident2_dep" name="stuPresident_dep" value="{{data[0]['cand3_dep']}}">
-                                        <option disabled value="">학과를 선택하세요</option>
+                                    <select id="sec_stuPresident2_dep" name="stuPresident_dep">
+                                        <option selected disabled value="">학과를 선택하세요</option>
                                         <option value="컴퓨터시스템과">컴퓨터시스템과</option>
                                         <option value="컴퓨터정보과">컴퓨터정보과</option>
                                         <option value="항공운항과">항공운항과</option>
@@ -99,7 +98,7 @@
         <br/><br/>
         <div class="field is-grouped is-grouped-centered">
             <div class="control">
-                <button class="button is-link" id="btnSubmit">등록</button>
+                <button class="button is-link" id="btnSubmit">수정</button>
             </div>
             <div class="control">
                 <button class="button is-link is-light" onclick="location.href='/'">취소</button>

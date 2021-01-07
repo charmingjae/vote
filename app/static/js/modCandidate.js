@@ -1,12 +1,3 @@
-function getParameterByName(name) {
-  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-  var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-    results = regex.exec(location.search);
-  return results == null
-    ? ""
-    : decodeURIComponent(results[1].replace(/\+/g, " "));
-}
-
 $(document).ready(function () {
   $("#btnSubmit").click(function () {
     var msgCandidate = document.getElementById("msgCandidate").value;
@@ -61,7 +52,11 @@ $(document).ready(function () {
             msgCandidate
         )
       ) {
-        document.regCandidateForm.submit();
+        var lstPath = document.location.pathname.split("/")[3];
+        $("#modCandidateForm_id").append(
+          "<input type='hidden' name='candNum' value='" + lstPath + "' />"
+        );
+        document.modCandidateForm.submit();
       } else {
         return false;
       }
