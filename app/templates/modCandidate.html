@@ -33,12 +33,12 @@
                     <label class="label">총 학생 회장 후보</label>
                     <div class="control">
                         <div style="float:left; width:45%">
-                            <input class="input" type="text" placeholder="이름" name="candidate_name" id="top_stuPresident">
+                            <input class="input" type="text" value="{{data[0]['cand1']}}" name="candidate_name" id="top_stuPresident">
                         </div>
                         <div style="float:right;">
                                 <div class="select">
-                                    <select id="top_stuPresident_dep" name="stuPresident_dep">
-                                        <option selected disabled value="">학과를 선택하세요</option>
+                                    <select id="top_stuPresident_dep" name="stuPresident_dep" value="{{data[0]['cand1_dep']}}">
+                                        <option disabled value="">학과를 선택하세요</option>
                                         <option value="컴퓨터시스템과">컴퓨터시스템과</option>
                                         <option value="컴퓨터정보과">컴퓨터정보과</option>
                                         <option value="항공운항과">항공운항과</option>
@@ -52,12 +52,12 @@
                     <label class="label">부 학생 회장 후보1</label>
                     <div class="control">
                         <div style="float:left; width:45%">
-                            <input class="input" type="text" placeholder="이름" name="candidate_name" id="sec_stuPresident1">
+                            <input class="input" type="text" value="{{data[0]['cand2']}}" name="candidate_name" id="sec_stuPresident1">
                         </div>
                         <div style="float:right;">
                                 <div class="select">
-                                    <select id="sec_stuPresident1_dep" name="stuPresident_dep">
-                                        <option selected disabled value="">학과를 선택하세요</option>
+                                    <select id="sec_stuPresident1_dep" name="stuPresident_dep" value="{{data[0]['cand2_dep']}}">
+                                        <option disabled value="">학과를 선택하세요</option>
                                         <option value="컴퓨터시스템과">컴퓨터시스템과</option>
                                         <option value="컴퓨터정보과">컴퓨터정보과</option>
                                         <option value="항공운항과">항공운항과</option>
@@ -71,12 +71,12 @@
                     <label class="label">부 학생 회장 후보2</label>
                     <div class="control">
                         <div style="float:left; width:45%">
-                            <input class="input" type="text" placeholder="이름" name="candidate_name" id="sec_stuPresident2">
+                            <input class="input" type="text" value="{{data[0]['cand3']}}" name="candidate_name" id="sec_stuPresident2">
                         </div>
                         <div style="float:right;">
                                 <div class="select">
-                                    <select id="sec_stuPresident2_dep" name="stuPresident_dep">
-                                        <option selected disabled value="">학과를 선택하세요</option>
+                                    <select id="sec_stuPresident2_dep" name="stuPresident_dep" value="{{data[0]['cand3_dep']}}">
+                                        <option disabled value="">학과를 선택하세요</option>
                                         <option value="컴퓨터시스템과">컴퓨터시스템과</option>
                                         <option value="컴퓨터정보과">컴퓨터정보과</option>
                                         <option value="항공운항과">항공운항과</option>
@@ -90,7 +90,7 @@
                 <div class="field">
                     <label class="label">후보자 공약</label>
                     <div class="control">
-                        <textarea class="textarea" id="msgCandidate" name="msgCandidate"></textarea>
+                        <textarea class="textarea" id="msgCandidate" name="msgCandidate">{{data[0]['candMsg']}}</textarea>
                     </div>
                 </div>
             </div>

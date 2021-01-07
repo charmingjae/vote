@@ -653,12 +653,16 @@ def manage_process():
         db_class.commit()
         return redirect('/manageCandidate?flag=1')
     if activity == 2:
-        return redirect('/modCandidate/'+str(num))
+        return redirect('/modCandidate/mod/'+str(num))
 
 
-@app.route('/modCandidate')
-def modify_candidate():
-    return render_template('modCandidate.html')
+@app.route('/modCandidate/mod/<candNum>')
+def modify_candidate(candNum):
+    db_class = db.Database()
+    sql = "SELECT * FROM candidate where idx = %s" % candNum
+    row = db_class.executeAll(sql)
+    print(row)
+    return render_template('modCandidate.html', data=row)
 
 
 if __name__ == '__main__':
