@@ -653,7 +653,12 @@ def manage_process():
         db_class.commit()
         return redirect('/manageCandidate?flag=1')
     if activity == 2:
-        pass
+        return redirect('/modCandidate/'+str(num))
+
+
+@app.route('/modCandidate')
+def modify_candidate():
+    return render_template('modCandidate.html')
 
 
 if __name__ == '__main__':

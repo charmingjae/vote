@@ -36,7 +36,7 @@ function mngModify() {
   if (!flag) {
     alert("관리 할 후보자를 선택하세요.");
   } else {
-    $("#mngForm_id").append("<input type='hidden' name='act' value='1' />");
+    $("#mngForm_id").append("<input type='hidden' name='act' value='2' />");
     document.mngForm.submit();
   }
 }
