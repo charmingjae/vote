@@ -203,7 +203,8 @@ def getUserVote(username):
 @app.route('/')
 def helloIndex():
     if "username" in session:
-        return render_template('index.html', userSession=session["username"])
+        print(session)
+        return render_template('index.html', userSession=session["username"], userAuth=session["userauth"])
     else:
         return render_template('index.html')
 
@@ -216,7 +217,7 @@ def hellohtml():
         # 2. 투표 한 사람이면 '이미 투표를 완료했습니다.' alert 띄우기
         if res:
             response = '''alert(' %s님은 이미 투표를 완료했습니다.');''' % session["username"]
-            return render_template('index.html', response=response, userSession=session["username"])
+            return render_template('index.html', response=response, userSession=session["username"], userAuth=session['userauth'])
         else:
             db_class = db.Database()
             sql = "SELECT * FROM candidate"
@@ -236,7 +237,7 @@ def finish_vote():
 
     response = '선정 된 후보자 : ' + candidate
     if "username" in session:
-        return render_template('fin.html', response=response, userSession=session["username"])
+        return render_template('fin.html', response=response, userSession=session["username"], userAuth=session['userauth'])
     else:
         return render_template('fin.html', response=response)
 
@@ -257,7 +258,7 @@ def new_tran():
 
     if res:
         response = '''alert(' %s님은 이미 투표를 완료했습니다.');''' % session["username"]
-        return render_template('index.html', response=response, userSession=session["username"])
+        return render_template('index.html', response=response, userSession=session["username"], userAuth=session['userauth'])
     else:
         print("session : ", session["username"])
         candidate = request.form['candidate']
@@ -287,7 +288,7 @@ def new_tran():
         response = '''alert('🥳 투표해주셔서 감사합니다. 🥳');'''
         # return jsonify(response), 201
         if "username" in session:
-            return render_template('index.html', response=response, userSession=session["username"])
+            return render_template('index.html', response=response, userSession=session["username"], userAuth=session['userauth'])
         else:
             return render_template('index.html', response=response)
 
@@ -369,26 +370,35 @@ def new_mines():
 
 @ app.route('/chain', methods=['GET'])
 def full_chain():
-    # # 노드 검증
-    # replaced = blockchain.resolve_conflicts()
+    userid = session["username"]
+    db_class = db.Database()
+    sql = "SELECT auth FROM user WHERE userid = '%s'" % userid
+    row = db_class.executeAll(sql)
+    userAuth = row[0]['auth']
 
-    # if replaced:
-    #     print(':: Our chain was replaced ::')
-    #     # 'new_chain': blockchain.chain
+    if userAuth == 'admin':
+        # # 노드 검증
+        # replaced = blockchain.resolve_conflicts()
 
-    # else:
-    #     print(':: Our chain is representative ::')
-    # sort block by index - descending
+        # if replaced:
+        #     print(':: Our chain was replaced ::')
+        #     # 'new_chain': blockchain.chain
 
-    # chains = sorted(blockchain.chain, key=(lambda x: x['index']), reverse=True)
-    chains = blockchain.chain
-    response = {
-        # 'chain': blockchain.chain,
-        'chain': chains,
-        'length': len(blockchain.chain),
-    }
-    return jsonify(response), 200
-    # return json.dumps(response), 200
+        # else:
+        #     print(':: Our chain is representative ::')
+        # sort block by index - descending
+
+        # chains = sorted(blockchain.chain, key=(lambda x: x['index']), reverse=True)
+        chains = blockchain.chain
+        response = {
+            # 'chain': blockchain.chain,
+            'chain': chains,
+            'length': len(blockchain.chain),
+        }
+        return jsonify(response), 200
+        # return json.dumps(response), 200
+    else:
+        return render_template('index.html', authflag='''alert('접근할 수 없는 권한입니다.');''')
 
 
 @ app.route('/nodes/register', methods=['POST'])
@@ -441,7 +451,7 @@ def getTotal():
     if row[0]['COUNT(*)'] == 0:
         flag = False
         if "username" in session:
-            return render_template('total.html', flag=flag, userSession=session["username"])
+            return render_template('total.html', flag=flag, userSession=session["username"], userAuth=session['userauth'])
         else:
             return render_template('total.html', flag=flag)
     else:
@@ -477,7 +487,7 @@ def getTotal():
                 superiority = '박빙!'
 
         if "username" in session:
-            return render_template('total.html', flag=flag, chainLength=chainLength, candData=candArr, total_len=total_len, superiority=superiority, userSession=session["username"])
+            return render_template('total.html', flag=flag, chainLength=chainLength, candData=candArr, total_len=total_len, superiority=superiority, userSession=session["username"], userAuth=session['userauth'])
         else:
             return render_template('total.html', flag=flag, chainLength=chainLength, candData=candArr, total_len=total_len, superiority=superiority)
 
@@ -535,11 +545,14 @@ def loginProg():
 
     sql = "SELECT COUNT(*) FROM user WHERE userid = '%s' and userpw = '%s'" % (userid, userpw)
     row = db_class.executeAll(sql)
+    sql = "SELECT auth FROM user WHERE userid = '%s'" % (userid)
+    row2 = db_class.executeAll(sql)
+    print(row2)
     if row[0]['COUNT(*)'] == 1:
         session["username"] = userid
+        session["userauth"] = row2[0]['auth']
         response = '''alert('로그인 성공! %s');''' % session["username"]
-        userSession = session["username"]
-        return render_template('index.html', response=response, userSession=session["username"])
+        return render_template('index.html', response=response, userSession=session["username"], userAuth=session['userauth'])
     else:
         response = '''alert('입력 정보를 확인하세요.');'''
         return render_template('login.html', response=response)
@@ -559,7 +572,7 @@ def fresh():
     db_class.commit()
     response = '''alert('초기화 완료!')'''
     if "username" in session:
-        return render_template('index.html', response=response, userSession=session["username"])
+        return render_template('index.html', response=response, userSession=session["username"], userAuth=session['userauth'])
     else:
         return render_template('index.html', response=response)
 
@@ -585,7 +598,7 @@ def scope():
     print(data_sort)
     chains = blockchain.chain
     if "username" in session:
-        return render_template('scope.html', data=data, userSession=session["username"], chain=chains)
+        return render_template('scope.html', data=data, userSession=session["username"], chain=chains, userAuth=session['userauth'])
     else:
         return render_template('scope.html', data=data, chain=chains)
 

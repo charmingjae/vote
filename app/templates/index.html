@@ -28,5 +28,13 @@
                 </script>
             {% endautoescape %}
         {% endif %}
+
+        {% if authflag %}
+            {% autoescape off %}
+                <script>
+                    {{authflag}}
+                </script>
+            {% endautoescape %}
+        {% endif %}
     </body>
 </html>
