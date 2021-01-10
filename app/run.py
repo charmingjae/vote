@@ -398,7 +398,7 @@ def full_chain():
         return jsonify(response), 200
         # return json.dumps(response), 200
     else:
-        return render_template('index.html', authflag='''alert('접근할 수 없는 권한입니다.');''')
+        return render_template('index.html', authflag='''alert('접근할 수 없는 권한입니다.');location.href='/';''')
 
 
 @ app.route('/nodes/register', methods=['POST'])
@@ -551,7 +551,7 @@ def loginProg():
     if row[0]['COUNT(*)'] == 1:
         session["username"] = userid
         session["userauth"] = row2[0]['auth']
-        response = '''alert('로그인 성공! %s');''' % session["username"]
+        response = '''alert('로그인 성공! %s');location.href='/';''' % session["username"]
         return render_template('index.html', response=response, userSession=session["username"], userAuth=session['userauth'])
     else:
         response = '''alert('입력 정보를 확인하세요.');'''
@@ -566,15 +566,18 @@ def logout():
 
 @ app.route('/freshUser')
 def fresh():
-    db_class = db.Database()
-    sql = "UPDATE user SET voteWT = 'NO'"
-    db_class.execute(sql)
-    db_class.commit()
-    response = '''alert('초기화 완료!')'''
-    if "username" in session:
-        return render_template('index.html', response=response, userSession=session["username"], userAuth=session['userauth'])
+    if session['userauth'] == 'admin':
+        db_class = db.Database()
+        sql = "UPDATE user SET voteWT = 'NO'"
+        db_class.execute(sql)
+        db_class.commit()
+        response = '''alert('초기화 완료!')'''
+        if "username" in session:
+            return render_template('index.html', response=response, userSession=session["username"], userAuth=session['userauth'])
+        else:
+            return render_template('index.html', response=response)
     else:
-        return render_template('index.html', response=response)
+        return render_template('index.html', response=None, userSession=session["username"], userAuth=session['userauth'], authflag='''alert('접근할 수 없는 권한입니다.'); location.href='/';''')
 
 
 @app.route('/scope')

@@ -104,5 +104,13 @@
                 <button class="button is-link is-light" onclick="location.href='/'">취소</button>
             </div>
         </div>
+
+        {% else %}
+            <script>
+                alert('접근할 수 없는 권한입니다.');
+                location.href="/";
+            </script>
+
+        {% endif %}
     </body>
 </html>
