@@ -623,7 +623,7 @@ def scope_index(index):
 
 @app.route('/regCandidate')
 def register_candidate():
-    return render_template('regCandidate.html')
+    return render_template('regCandidate.html', userSession=session["username"], userAuth=session['userauth'])
 
 
 @app.route('/regCandidate/progress', methods=['POST'])
@@ -651,7 +651,7 @@ def manage():
     sql = "SELECT * FROM candidate"
     row = db_class.executeAll(sql)
 
-    return render_template('manage.html', data=row)
+    return render_template('manage.html', data=row, userSession=session["username"], userAuth=session['userauth'])
 
 
 @app.route('/manageCandidate/progress', methods=['GET'])
