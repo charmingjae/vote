@@ -439,6 +439,7 @@ def consensus():
 
 
 @ app.route('/total')
+# AUTO_INCREMENT를 반드시 1로 수정하고 진입해야 한다. 아니면 리스트 오류 걸림
 def getTotal():
     # 현재 블록체인 길이
     chainLength = len(blockchain.chain)
@@ -455,7 +456,6 @@ def getTotal():
         else:
             return render_template('total.html', flag=flag)
     else:
-        # 수정점
         flag = True
         # USE row[0]['COUNT(*)']
         candArr = []
@@ -711,10 +711,6 @@ def indexReset():
     try:
         db_class = db.Database()
         sql = "alter table candidate auto_increment=1;"
-        db_class.execute(sql)
-        sql = "SET @COUNT = 0;"
-        db_class.execute(sql)
-        sql = "UPDATE candidate SET idx = @COUNT := @COUNT +1;"
         db_class.execute(sql)
         db_class.commit()
         authflag = '''alert('인덱스 초기화 완료!');location.href='/';'''
