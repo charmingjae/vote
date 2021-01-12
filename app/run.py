@@ -470,6 +470,8 @@ def getTotal():
             for tranLength in range(len(blockchain.chain[blockLength]['transactions'])):
                 candNum = int(blockchain.chain[blockLength]
                               ['transactions'][tranLength]['candidate'])
+                print(candArr)
+                print(candArr[candNum-1])
                 candArr[candNum-1] = candArr[candNum-1]+1
 
         print(candArr)
@@ -642,7 +644,7 @@ def reg_candidate_progress():
     db_class.execute(sql)
     db_class.commit()
 
-    return render_template('index.html')
+    return render_template('index.html', userSession=session['username'], userAuth=session['userauth'])
 
 
 @app.route('/manageCandidate')
@@ -678,7 +680,7 @@ def modify_candidate(candNum):
     sql = "SELECT * FROM candidate where idx = %s" % candNum
     row = db_class.executeAll(sql)
     print(row)
-    return render_template('modCandidate.html', data=row)
+    return render_template('modCandidate.html', data=row, userSession=session["username"], userAuth=session['userauth'])
 
 
 @app.route('/modCandidate/progress', methods=['POST'])
@@ -700,7 +702,24 @@ def mod_candidate_progress():
     db_class.execute(sql)
     db_class.commit()
 
-    return render_template('index.html')
+    return render_template('index.html', userSession=session['username'], userAuth=session['userauth'])
+
+
+@app.route('/indexReset')
+def indexReset():
+    try:
+        db_class = db.Database()
+        sql = "alter table candidate auto_increment=1;"
+        db_class.execute(sql)
+        sql = "SET @COUNT = 0;"
+        db_class.execute(sql)
+        sql = "UPDATE candidate SET idx = @COUNT := @COUNT +1;"
+        db_class.execute(sql)
+        db_class.commit()
+        authflag = '''alert('인덱스 초기화 완료!');location.href='/';'''
+        return render_template('index.html', userSession=session['username'], userAuth=session['userauth'], authflag=authflag)
+    except:
+        print('예외 발생')
 
 
 if __name__ == '__main__':
