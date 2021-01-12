@@ -455,6 +455,7 @@ def getTotal():
         else:
             return render_template('total.html', flag=flag)
     else:
+        # 수정점
         flag = True
         # USE row[0]['COUNT(*)']
         candArr = []
