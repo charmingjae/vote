@@ -31,17 +31,14 @@
                 {% endif %}
             </div>
         </form> -->
-        <br/>
+        <!-- <br/>
         {% if userSession %}
                     <p> {{userSession}} 아이디로 투표 중 입니다.</p>
                     <p>{{userAuth}}</p>
         {% else %}
-        {% endif %}
+        {% endif %} -->
 
-        <!-- {% for i in response %}
-            <a>{{i}}</a><br/>
-            <a>{{i['cand1']}}</a><br/>
-        {% endfor %} -->
+        {% if response %}
         <br/><br/><br/>
         <section class="content tiles">
             <div class="container">
@@ -71,6 +68,17 @@
                 </div>
             </div>
         </section>
-          
+        {% else %}
+        <div class="container is-max-desktop">
+            <div class="notification is-white">
+                <section class="section is-medium">
+                    <h1 class="title" style="font-size:50pt;"><strong>투표 시작 전입니다!</strong></h1><br/>
+                    <h2 class="subtitle">
+                      현재 등록된 후보자가 없습니다. 안내 된 시간에 따라 투표에 참여 해주세요.
+                    </h2>
+                  </section>
+            </div>
+        </div>
+        {% endif %}
     </body>
 </html>

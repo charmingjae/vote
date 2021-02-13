@@ -554,7 +554,7 @@ def loginProg():
     if row[0]['COUNT(*)'] == 1:
         session["username"] = userid
         session["userauth"] = row2[0]['auth']
-        response = '''alert('로그인 성공! %s');location.href='/';''' % session["username"]
+        response = '''location.href='/';'''
         return render_template('index.html', response=response, userSession=session["username"], userAuth=session['userauth'])
     else:
         response = '''alert('입력 정보를 확인하세요.');'''
