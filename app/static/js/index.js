@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  var date1 = new Date("2021-01-17 18:02:00");
+  var date1 = new Date("2021-02-20 18:02:00");
   var date2 = new Date();
   if (date2 > date1) {
     console.log("Big");

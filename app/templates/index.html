@@ -12,9 +12,23 @@
     <body>
         {% include 'navbar.html' %}
 
+
+        <div class="container is-max-desktop">
+            <div class="notification is-white">
+                <section class="section is-medium">
+                    <h1 class="title" style="font-size:50pt;"><strong>환영합니다!</strong></h1><br/>
+                    <h2 class="subtitle">
+                      본 프로젝트는 <strong>블록체인</strong> 기반의 투표 시스템 구현을 목표로 만들어졌습니다.<br/>
+                      탈중앙화 기반의 안전하고 신뢰성 있는 투표 시스템을 경험해보세요.
+                    </h2>
+                  </section>
+            </div>
+        </div>
+
+
         <div class="container index_container">
             <div class="buttons is-centered">
-                <button class="button is-primary" onclick="location.href='/vote'" id="btnVote">&nbsp;&nbsp;🥳&nbsp;&nbsp;</button>
+                <button class="button is-primary" onclick="location.href='/vote'" id="btnVote">&nbsp;&nbsp;<b>투표하기</b>&nbsp;&nbsp;</button>
             </div>
         </div>
 
