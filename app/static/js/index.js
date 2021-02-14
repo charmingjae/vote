@@ -1,3 +1,5 @@
+const { start } = require("repl");
+
 $(document).ready(function () {
   var date1 = new Date("2021-02-20 18:02:00");
   var date2 = new Date();
@@ -12,9 +14,12 @@ $(document).ready(function () {
 
 function chkTimes() {
   var now = new Date();
-  var chkPoint = new Date("2021-02-13 18:02:00");
-  if (now > chkPoint) {
+  var startDate = new Date("2021-02-12 18:02:00");
+  var endDate = new Date("2021-02-13 18:02:00");
+  if (endDate <= now) {
     location.href = "/voteOver";
+  } else if (now < startDate) {
+    location.href = "/voteBef";
   } else {
     location.href = "/vote";
   }
