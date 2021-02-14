@@ -9,3 +9,13 @@ $(document).ready(function () {
     $("#btnVote").attr("disabled", false);
   }
 });
+
+function chkTimes() {
+  var now = new Date();
+  var chkPoint = new Date("2021-02-13 18:02:00");
+  if (now > chkPoint) {
+    location.href = "/voteOver";
+  } else {
+    location.href = "/vote";
+  }
+}

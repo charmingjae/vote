@@ -230,6 +230,11 @@ def hellohtml():
         return render_template('login.html', response=None)
 
 
+@app.route('/voteOver')
+def voteOver():
+    return render_template('voteOver.html', userSession=session["username"], userAuth=session['userauth'])
+
+
 # 투표 마지막 페이지로 이동
 @ app.route('/vote/finish', methods=['POST'])
 def finish_vote():
