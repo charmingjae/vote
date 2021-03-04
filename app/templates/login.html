@@ -11,15 +11,21 @@
     <body>
         {% include 'navbar.html' %}
 
-        <form action="/login/progress" method="POST" name="loginForm">
-                <div class="field">
+        <form action="/login/progress" method="POST" name="loginForm" class="box columns is-centered">
+                <!-- <div class="field">
                     <div class="control">
                         <input class="input is-info" type="number" placeholder="아이디" name="userid"><br/><br/>
                         <input class="input is-info" type="password" placeholder="패스워드" name="userpw">
                     </div><br/>
                     <button type="button" class="button is-info" onclick="chkFormNull()">Login</button>
+                </div> -->
+                <div class="column is-half">
+                    <input class="input is-info" type="number" placeholder="아이디" name="userid"><br/><br/>
+                    <input class="input is-info" type="password" placeholder="패스워드" name="userpw"><br/><br/>
+                    <button type="button" class="button is-info" onclick="chkFormNull()">Login</button>
                 </div>
         </form>
+
 
         {% if response == None %}
         {% else %}
