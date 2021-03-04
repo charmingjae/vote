@@ -232,7 +232,10 @@ def hellohtml():
 
 @app.route('/voteOver')
 def voteOver():
-    return render_template('voteOver.html', userSession=session["username"], userAuth=session['userauth'])
+    if "username" in session:
+        return render_template('voteOver.html', userSession=session["username"], userAuth=session['userauth'])
+    else:
+        return render_template('login.html', reponse=None)
 
 
 @app.route('/voteBef')
